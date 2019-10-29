@@ -4,7 +4,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 
-import MarketplaceItem from 'components/plugin_marketplace/marketplace_item/marketplace_item.jsx';
+import MarketplaceItem from './marketplace_item.js';
 
 describe('components/MarketplaceItem', () => {
     const baseProps = {
@@ -16,11 +16,11 @@ describe('components/MarketplaceItem', () => {
         signatureUrl: 'http://example.com/signature',
         homepageUrl: 'http://example.com',
         iconUrl: '',
-        installed: false,
+        installedVersion: '1.0.0',
         onConfigure: () => {}, // eslint-disable-line no-empty-function
-        onInstalled: () => {}, // eslint-disable-line no-empty-function
+        installing: false,
         actions: {
-            installPluginFromUrl: () => {}, // eslint-disable-line no-empty-function
+            installMarketplacePlugin: () => {}, // eslint-disable-line no-empty-function
         },
     };
 
@@ -68,14 +68,12 @@ describe('components/MarketplaceItem', () => {
     test('should match snapshot, with server error', () => {
         const props = {
             ...baseProps,
+            error: 'An error occurred.',
         };
 
         const wrapper = shallow(
             <MarketplaceItem {...props}/>
         );
-        wrapper.setState({
-            serverError: true,
-        });
 
         expect(wrapper).toMatchSnapshot();
     });

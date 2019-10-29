@@ -4,16 +4,26 @@
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
-import {installPluginFromUrl} from 'mattermost-redux/actions/admin';
+import {installMarketplacePlugin} from 'actions/marketplace';
 
-import MarketplaceItem from './marketplace_item.jsx';
+import MarketplaceItem from './marketplace_item.js';
+
+function mapStateToProps(state, props) {
+    const installing = Boolean(state.views.marketplace.installing[props.id]);
+    const error = state.views.marketplace.error[props.id];
+
+    return {
+        installing,
+        error,
+    };
+}
 
 function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators({
-            installPluginFromUrl,
+            installMarketplacePlugin,
         }, dispatch),
     };
 }
 
-export default connect(null, mapDispatchToProps)(MarketplaceItem);
+export default connect(mapStateToProps, mapDispatchToProps)(MarketplaceItem);

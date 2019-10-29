@@ -7,14 +7,14 @@
 // - Use element ID when selecting an element. Create one if none.
 // ***************************************************************
 
-describe('Plugin Marketplace modal', () => {
-    before(() => {
-        // # Set ServiceSettings to expected values
+describe('Plugin Marketplace', () => {
+    beforeEach(() => {
+        // # Configure marketplace as enabled
         const newSettings = {
             PluginSettings: {
                 Enable: true,
-                EnableUploads: true,
                 EnableMarketplace: true,
+                MarketplaceUrl: 'https://api.integrations.mattermost.com',
             },
         };
         cy.apiUpdateConfig(newSettings);
@@ -29,14 +29,14 @@ describe('Plugin Marketplace modal', () => {
         // * Dropdown menu should be visible
         cy.get('#sidebarDropdownMenu').should('be.visible');
 
-        // * Marketplace button should not be visible
+        // * Marketplace button should be visible
         cy.get('#marketplaceModal').should('be.visible');
 
         // # Open up marketplace modal
         cy.get('#marketplaceModal').click();
     });
 
-    it('should render Marketplace', () => {
+    it('should render', () => {
         // * marketplace should be visible
         cy.get('#modal_marketplace').should('be.visible');
 
@@ -69,5 +69,34 @@ describe('Plugin Marketplace modal', () => {
 
         // * marketplace should not be visible
         cy.get('#modal_marketplace').should('not.be.visible');
+    });
+
+    it('should prompt to update', () => {
+        // # Login as sysadmin
+        cy.installPluginFromUrl('https://github.com/mattermost/mattermost-plugin-github/releases/download/v0.7.0/github-0.7.0.tar.gz', true);
+
+        // * marketplace should be visible
+        cy.get('#modal_marketplace').should('be.visible');
+
+        // * search should be visible
+        cy.get('#searchMarketplaceTextbox').type('github');
+
+        // * github plugin should be visible
+        cy.get('#marketplace-plugin-github').should('be.visible');
+
+        // * github plugin should have update prompt
+        cy.get('#marketplace-plugin-github + .more-modal__subrow').should('be.visible').and('to.contain', 'Update available');
+
+        // * github plugin should have update prompt
+        cy.get('#marketplace-plugin-github + .more-modal__subrow a').should('be.visible').and('have.text', 'Update');
+
+        // * update plugin
+        cy.get('#marketplace-plugin-github + .more-modal__subrow a').click();
+
+        // * should show "Installing..."
+        cy.get('#marketplace-plugin-github .more-modal__actions .btn.btn-primary').should('be.visible').and('have.text', 'Installing...');
+
+        // * should complete installation
+        cy.get('#marketplace-plugin-github .more-modal__actions .btn.btn-primary').should('be.visible').and('have.text', 'Configure');
     });
 });

@@ -5,7 +5,7 @@ import React from 'react';
 
 import {shallowWithIntl} from 'tests/helpers/intl-test-helper.jsx';
 
-import MarketplaceModal from './marketplace_modal.jsx';
+import MarketplaceModal from './marketplace_modal.js';
 
 describe('components/MarketplaceModal', () => {
     const marketplacePluginsSample = [{
@@ -33,7 +33,7 @@ describe('components/MarketplaceModal', () => {
             siteURL: 'http://example.com',
             actions: {
                 closeModal: jest.fn(),
-                getMarketplacePlugins: jest.fn(),
+                getMarketplacePlugins: jest.fn(() => ({})),
             },
         };
     });

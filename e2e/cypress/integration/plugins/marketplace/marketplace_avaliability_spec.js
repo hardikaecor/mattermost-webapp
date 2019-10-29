@@ -7,38 +7,73 @@
 // - Use element ID when selecting an element. Create one if none.
 // ***************************************************************
 
-describe('Plugin Marketplace availability', () => {
-    it('should not render Marketplace for non admin user', () => {
-        // # Set ServiceSettings to expected values
-        const newSettings = {
-            PluginSettings: {
-                Enable: true,
-                EnableUploads: true,
-                EnableMarketplace: true,
-            },
-        };
-        cy.apiUpdateConfig(newSettings);
+describe('Plugin Marketplace', () => {
+    describe('should not render marketplace in main menu', () => {
+        afterEach(() => {
+            // # Click hamburger main menu
+            cy.get('#sidebarHeaderDropdownButton').click();
 
-        // # Login as non admin user
-        cy.apiLogin('user-1');
-        cy.visit('/');
+            // * Dropdown menu should be visible
+            cy.get('#sidebarDropdownMenu').should('be.visible');
 
-        // # Click hamburger main menu
-        cy.get('#sidebarHeaderDropdownButton').click();
+            // * Marketplace button should not be visible
+            cy.get('#marketplaceModal').should('not.be.visible');
+        });
 
-        // * Dropdown menu should be visible
-        cy.get('#sidebarDropdownMenu').should('be.visible');
+        it('for non-admin', () => {
+            // # Configure marketplace as enabled
+            const newSettings = {
+                PluginSettings: {
+                    Enable: true,
+                    EnableMarketplace: true,
+                    MarketplaceUrl: 'https://api.integrations.mattermost.com',
+                },
+            };
+            cy.apiUpdateConfig(newSettings);
 
-        // * Marketplace button should not be visible
-        cy.get('#marketplaceModal').should('not.be.visible');
+            // # Login as non admin user
+            cy.apiLogin('user-1');
+            cy.visit('/');
+        });
+
+        it('when marketplace disabled', () => {
+            // # Configure marketplace as disabled
+            const newSettings = {
+                PluginSettings: {
+                    Enable: true,
+                    EnableMarketplace: false,
+                    MarketplaceUrl: 'https://api.integrations.mattermost.com',
+                },
+            };
+            cy.apiUpdateConfig(newSettings);
+
+            // # Login as sysadmin
+            cy.apiLogin('sysadmin');
+            cy.visit('/');
+        });
+
+        it('when plugins disabled', () => {
+            // # Configure plugins as disabled
+            const newSettings = {
+                PluginSettings: {
+                    Enable: false,
+                    EnableMarketplace: true,
+                    MarketplaceUrl: 'https://api.integrations.mattermost.com',
+                },
+            };
+            cy.apiUpdateConfig(newSettings);
+
+            // # Login as sysadmin
+            cy.apiLogin('sysadmin');
+            cy.visit('/');
+        });
     });
 
-    it('should not connect to the Marketplace server', () => {
+    it('should fail to connect to an invalid marketplace server', () => {
         // # Set ServiceSettings to expected values
         const newSettings = {
             PluginSettings: {
                 Enable: true,
-                EnableUploads: true,
                 EnableMarketplace: true,
                 MarketplaceUrl: 'some_site.com',
             },

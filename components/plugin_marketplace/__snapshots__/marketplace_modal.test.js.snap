@@ -84,7 +84,7 @@ exports[`components/MarketplaceModal should match the snapshot, error banner is 
               downloadUrl="https://github.com/mattermost/mattermost-test/releases/download/v1.0.3/com.mattermost.nps-1.0.3.tar.gz"
               homepageUrl="https://github.com/mattermost/mattermost-test"
               id="com.mattermost.test"
-              installed={true}
+              installedVersion="1.0.3"
               isPrepackaged={false}
               key="com.mattermost.test"
               name="Test"
@@ -266,7 +266,7 @@ exports[`components/MarketplaceModal should match the snapshot, with plugins ins
               downloadUrl="https://github.com/mattermost/mattermost-test/releases/download/v1.0.3/com.mattermost.nps-1.0.3.tar.gz"
               homepageUrl="https://github.com/mattermost/mattermost-test"
               id="com.mattermost.test"
-              installed={true}
+              installedVersion="1.0.3"
               isPrepackaged={false}
               key="com.mattermost.test"
               name="Test"
