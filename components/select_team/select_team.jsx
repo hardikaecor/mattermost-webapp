@@ -29,6 +29,8 @@ import SelectTeamItem from './components/select_team_item.jsx';
 const TEAMS_PER_PAGE = 200;
 const TEAM_MEMBERSHIP_DENIAL_ERROR_ID = 'api.team.add_members.user_denied';
 
+import {externalProductUrl} from 'utils/constants';
+
 export default class SelectTeam extends React.Component {
     static propTypes = {
         currentUserId: PropTypes.string.isRequired,
@@ -103,18 +105,20 @@ export default class SelectTeam extends React.Component {
     };
 
     handleLogoutClick = (e) => {
-        e.preventDefault();
-        emitUserLoggedOutEvent('/login');
-    };
 
-    clearError = (e) => {
         e.preventDefault();
 
-        this.setState({
-            error: null,
-        });
+        let matterCookies = GlobalActions.getCookies();
+        if ( matterCookies.MMCSRF != '' && matterCookies.MMCSRF != undefined)
+        {
+            emitUserLoggedOutEvent('/login');
+        }
+        else
+        {
+            window.location.href = externalProductUrl;
+        }
     };
-
+    
     render() {
         const {
             currentUserIsGuest,

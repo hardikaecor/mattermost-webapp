@@ -29,6 +29,8 @@ import MarketplaceModal from 'components/plugin_marketplace';
 import Menu from 'components/widgets/menu/menu.jsx';
 import TeamGroupsManageModal from 'components/team_groups_manage_modal';
 
+import {externalProductUrl} from 'utils/constants';
+
 export default class MainMenu extends React.PureComponent {
     static propTypes = {
         mobile: PropTypes.bool.isRequired,
@@ -94,7 +96,15 @@ export default class MainMenu extends React.PureComponent {
     }
 
     handleEmitUserLoggedOutEvent = () => {
-        GlobalActions.emitUserLoggedOutEvent();
+        let matterCookies = GlobalActions.getCookies();
+        if ( matterCookies.MMCSRF != '' && matterCookies.MMCSRF != undefined)
+        {
+            GlobalActions.emitUserLoggedOutEvent();
+        }
+        else
+        {
+            window.location.href = externalProductUrl;
+        }
     }
 
     getFlagged = (e) => {

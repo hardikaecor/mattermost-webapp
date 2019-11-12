@@ -248,7 +248,7 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
             BrowserStore.signalLogout();
         }
 
-        BrowserStore.clear();
+        BrowserStore.clear({exclude: [Constants.RECENT_EMOJI_KEY, 'selected_teams']});
         stopPeriodicStatusUpdates();
         WebsocketActions.close();
 
@@ -329,4 +329,15 @@ export async function redirectUserToDefaultTeam() {
     } else if (user.id) {
         browserHistory.push('/select_team');
     }
+}
+
+export function getCookies()
+{
+    let pairs = document.cookie.split(";");
+    let siteCookies = {};
+      for (let i=0; i<pairs.length; i++){
+        let pair = pairs[i].split("=");
+        siteCookies[(pair[0]+'').trim()] = unescape(pair.slice(1).join('='));
+      }
+    return siteCookies;
 }

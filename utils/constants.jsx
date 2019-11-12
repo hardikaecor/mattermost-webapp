@@ -1340,6 +1340,8 @@ export const Constants = {
 
 export const AcceptedProfileImageTypes = ['image/jpeg', 'image/png', 'image/bmp'];
 
+export const externalProductUrl = 'http://sunny-yes.dev.aecortech.com/mattermostLogout';
+
 t('suggestion.mention.channels');
 t('suggestion.mention.morechannels');
 t('suggestion.mention.unread.channels');
