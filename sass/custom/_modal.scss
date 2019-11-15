@@ -1,0 +1,69 @@
+.app__body {
+	.modal {
+		.modal-content {
+			background: $white;
+			color: $body-color !important;
+			.modal-header {
+	    		background: $white;
+	    		border-bottom-color: $theme-color-gray;
+		    	.modal-title {
+		    		color: $sidebar-bg;
+		    		.name {
+		    			color: $primary-color;
+		    		}
+		    	}
+		    	.close {
+		    		color: $sidebar-bg;
+		    	}
+	    	}
+	    	.modal-body {
+	    		.settings-table {
+	    			.settings-links {
+	    				background: $sidebar-bg;
+	    				.nav-pills {
+	    					> li {
+	    						&.active,
+	    						&:hover {
+	    							button {
+	    								background: rgba(255, 255, 255, 0.1);
+	    							}
+	    						}
+	    					}
+	    				}
+	    			}
+	    			.section-max {
+    					li {
+    						span {
+		    					a {
+		    						color: $primary-color;
+		    					}
+		    				}
+		    			}
+	    			}
+	    			.btn-cancel {
+	    				color: $primary-color;
+	    			}
+	    		}
+			    .channel-switch__suggestion-box {
+			    	.suggestion-list__divider {
+			    		&:first-child {
+				    		margin-top: 5px; 
+				    	}
+				    }
+				}
+				.suggestion-list__content {
+					background: $sidebar-bg;
+				}
+	    	}
+	    	.modal-footer {
+	    		background: $white;
+	    		border-top-color: $theme-color-gray;
+	    	}
+	    }
+	    .about-modal {
+	    	a {
+	    		color: $primary-color;
+	    	}
+	    }
+    }
+}

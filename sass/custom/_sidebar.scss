@@ -1,0 +1,96 @@
+.app__body {
+	.multi-teams {
+		.team-sidebar {
+			background: $sidebar-bg !important;
+		}
+		.team-wrapper {
+			.team-container {
+				&.active {
+					&:before {
+						background: $secondary-color !important;
+					}
+				}
+			}
+		}
+	}
+	.sidebar--left {
+		background: $sidebar-bg;
+		.nav {
+			li {
+				.sidebar-item {
+					color: $white;
+					svg {
+						fill: $white;
+					}
+					.icon {
+						opacity: 0.8;
+					}
+					&:hover {
+						background: transparent;
+						color: $secondary-color;
+						svg {
+							fill: $secondary-color;
+						}
+					}
+				}
+				&.active {
+					.sidebar-item {
+						background: transparent;
+						color: $secondary-color;
+						svg {
+							fill: $secondary-color;
+						}
+						&:before {
+							background: $secondary-color;
+						}
+					}
+				}
+			}
+		}
+		.nav-pills__container {
+			li {
+				> h4 {
+					color: $white !important;
+				}
+			}
+		}
+	}
+	.sidebar--right {
+		&.move--left {
+			background: $white;
+			color: $body-color;
+		}
+		&.sidebar--right--expanded {
+			width: calc(100% - 285px);
+			.sidebar-right-container {
+				background: $white !important;
+				color: $body-color;
+			}
+			.sidebar--right__expand {
+		    	color: $primary-color;
+			}
+		}
+		.sidebar-right-container {
+			.post-create__container {
+				.custom-textarea {
+					background: transparent;
+					color: $body-color;
+		    		border-color: $theme-color-gray;
+				}
+				.post-create-footer {
+					.comment-btn {
+						margin-top: 10px;
+					}
+				}
+			}
+			.post-right__scroll {
+				.BasicSeparator {
+					.separator__hr {
+						border-width: 0.3px;
+    					border-style: solid;
+					}
+				}
+			}
+		}
+	}
+}

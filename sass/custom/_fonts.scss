@@ -1,0 +1,23 @@
+@font-face {
+    font-family: "Neue Haas Unica Pro Light";
+    src:url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Light.eot'),
+    	url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Light.woff2') format('woff2'),
+        url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Light.woff') format('woff'),
+        // url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Light.otf') format('opentype'),
+        url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Light.ttf') format('truetype'),
+        url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Light.svg') format('svg');
+    font-weight: lighter;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Neue Haas Unica Pro Medium";
+    src:url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Medium.eot'),
+    	url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Medium.woff2') format('woff2'),
+        url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Medium.woff') format('woff'),
+        // url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Medium.otf') format('opentype'),
+        url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Medium.ttf') format('truetype'),
+        url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Medium.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

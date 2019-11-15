@@ -1,0 +1,153 @@
+.app__body {
+	.app__content {
+		background: $white !important;
+		color: $body-color !important;
+		.channel-header {
+			box-shadow: 0px 0px 40px 0px rgba(82, 63, 105, 0.1);
+			.heading {
+				color: #48465b !important;
+			}
+			.channel-header__icon {
+				color: $theme-color-gray !important;
+				border-color: $theme-color-gray !important;
+				svg {
+					fill: $theme-color-gray !important;
+				}
+				&:hover {
+					color: $primary-color !important;
+					border-color: $primary-color !important;
+					svg {
+						fill: $primary-color !important;
+					}
+				}
+			}
+			.search-bar__container {
+				.search__form {
+					border-color: $theme-color-gray !important;
+					.search-bar {
+						color: $theme-color-gray !important;
+					}
+					.search__icon {
+						svg {
+						    stroke: $theme-color-gray !important;
+						}
+					}
+				}
+			}
+			.channel-header__favorites {
+				color: #48465b !important;
+			}
+		}
+		.post-create__container {
+			background: $white !important;
+		    border-top: 1px solid lighten($theme-color-gray, 20%);
+		    padding: 15px 0;
+		    .custom-textarea {
+		    	background: $white;
+		    	color: $body-color;
+		    	border-color: $theme-color-gray;
+		    }
+		    .post-body__actions {
+		    	svg {
+		    		fill: $theme-color-gray;
+		    	}
+		    }
+			.icon--emoji {
+				&.active {
+					svg {
+			    		fill: $primary-color !important;
+			    	}
+			    }
+			}
+		}
+	}
+	.post-list__table {
+		.post {
+			&.current--user {
+				&.post--highlight {
+					&:not(.post--compact) {
+						.post-image__columns {
+							background: transparent !important;
+						}
+					}
+				}
+				&:not(.post--compact) {
+					.post-image__columns {
+						background: transparent !important;
+					}
+				}
+			}
+		}
+	}
+	.post {
+		padding: 20px; 
+		.reacticon__container,
+		.comment-icon__container {
+			fill: $white !important;
+		}
+		&.current--user {
+			.post__body {
+				padding: 0;
+			}
+		}
+		&.post--system {
+			.post__body {
+				color: $body-color !important;
+				padding: .2em 0;
+			}
+		}
+		.flag-icon__container {
+			fill: $theme-color-gray !important;
+		}
+
+		&:hover,
+		&.post--hovered {
+			.post__header {
+				.col__reply {
+					background: $primary-color !important;
+			    	padding: 0;
+				}
+				.search-item__jump {
+					color: $white !important;
+				}
+			}
+			.post-image__columns {
+				background: $white;
+			}
+		} 
+		.post__dropdown {
+			&:after {
+			    top: -8px;
+			    color: $white;
+			    letter-spacing: 0.5;
+			    font-size: 20px;
+			}
+		}
+		&.post--highlight {
+		    background: lighten($theme-color-gray, 22%) !important;
+		}
+	}
+	#post-list {
+		.post-list-holder-by-time {
+	    	background: $white;
+	    }
+	    .channel-intro {
+		    padding-top: 0;
+		    .channel-intro__content {
+		    	padding: 10px 0;
+		    }
+		}
+	}
+	.post-image__column,
+	.post-image__details {
+	    background: $sidebar-bg !important;
+	    padding: 0;
+	    margin: 0;
+	}
+	.search-item-snippet {
+		padding: 0;
+	}
+	.post__header {
+		margin-bottom: 15px;
+	}
+}

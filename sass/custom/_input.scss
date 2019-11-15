@@ -1,0 +1,11 @@
+.app__body {
+	.modal-body,
+	.form-group {
+		.form-control {
+			background: $white;
+			border-color: lighten($theme-color-gray, 20%);
+			box-shadow: none;
+			color: $theme-color-gray;
+		}
+	}
+}

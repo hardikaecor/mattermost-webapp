@@ -22,6 +22,8 @@ import SiteNameAndDescription from 'components/common/site_name_and_description'
 
 import FormattedMarkdownMessage from 'components/formatted_markdown_message.jsx';
 
+import {externalYESRegisterURL} from 'utils/constants';
+
 export default class SignupEmail extends React.Component {
     static propTypes = {
         location: PropTypes.object,
@@ -58,6 +60,8 @@ export default class SignupEmail extends React.Component {
     }
 
     componentDidMount() {
+        window.location.href = externalYESRegisterURL;
+
         trackEvent('signup', 'signup_user_01_welcome');
 
         this.setDocumentTitle(this.props.siteName);
