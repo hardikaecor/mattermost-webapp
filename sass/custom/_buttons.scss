@@ -1,0 +1,10 @@
+.app__body {
+	.btn {
+		&.btn-primary {
+			background-color: $primary-color !important;
+		}
+		&.btn-link {
+			color: $primary-color !important;
+		}
+	}
+}

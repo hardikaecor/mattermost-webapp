@@ -69,15 +69,20 @@ export default class SettingItemMin extends React.PureComponent {
 
     handleUpdateSection = (e) => {
         e.preventDefault();
-        this.props.actions.updateActiveSection(this.props.section);
-        this.props.updateSection(this.props.section);
+
+        if ( this.props.section != 'password' && this.props.section != 'email')
+        {
+            this.props.actions.updateActiveSection(this.props.section);
+            this.props.updateSection(this.props.section);
+        }
+
     }
 
     render() {
         let editButton = null;
         let describeSection = null;
 
-        if (!this.props.disableOpen && isMobile()) {
+        if (this.props.section != 'password' && this.props.section != 'email' && !this.props.disableOpen && isMobile()) {
             editButton = (
                 <div className='section-min__edit'>
                     <button
@@ -92,7 +97,7 @@ export default class SettingItemMin extends React.PureComponent {
                     </button>
                 </div>
             );
-        } else if (!this.props.disableOpen) {
+        } else if (this.props.section != 'password' && this.props.section != 'email' && !this.props.disableOpen) {
             editButton = (
                 <div className='section-min__edit'>
                     <button
