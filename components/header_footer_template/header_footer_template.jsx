@@ -22,10 +22,12 @@ export default class NotLoggedIn extends React.PureComponent {
     componentDidMount() {
         document.body.classList.add('sticky');
         document.getElementById('root').classList.add('container-fluid');
+        document.getElementById('root').classList.add('js-authentication');
     }
     componentWillUnmount() {
         document.body.classList.remove('sticky');
         document.getElementById('root').classList.remove('container-fluid');
+        document.getElementById('root').classList.remove('js-authentication');
     }
 
     render() {
