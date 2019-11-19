@@ -83,7 +83,7 @@ export default class CreateTeam extends React.PureComponent {
                             customDescriptionText={customDescriptionText}
                             siteName={siteName}
                         />
-                        <div className='signup__content'>
+                        <div className='signup__content create-team'>
                             <Switch>
                                 <Route
                                     path={`${this.props.match.url}/display_name`}

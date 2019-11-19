@@ -211,7 +211,7 @@ export default class SelectTeam extends React.Component {
             openContent = (
                 <div
                     id='teamsYouCanJoinContent'
-                    className='signup__content'
+                    className='signup__content select-team'
                 >
                     <h4>
                         <FormattedMessage
