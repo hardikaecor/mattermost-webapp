@@ -26,6 +26,8 @@ import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 
 import SelectTeamItem from './components/select_team_item.jsx';
 
+import * as GlobalActions from 'actions/global_actions.jsx';
+
 const TEAMS_PER_PAGE = 200;
 const TEAM_MEMBERSHIP_DENIAL_ERROR_ID = 'api.team.add_members.user_denied';
 
