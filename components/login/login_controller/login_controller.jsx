@@ -609,27 +609,27 @@ class LoginController extends React.Component {
 
         if (this.props.enableOpenServer && this.checkSignUpEnabled()) {
             loginControls.push(
-                <div
-                    className='form-group'
-                    key='signup'
-                >
-                    <span>
-                        <FormattedMessage
-                            id='login.noAccount'
-                            defaultMessage="Don't have an account? "
-                        />
-                        <Link
-                            id='signup'
-                            to={'/signup_user_complete' + this.props.location.search}
-                            className='signup-team-login'
-                        >
-                            <FormattedMessage
-                                id='login.create'
-                                defaultMessage='Create one now'
-                            />
-                        </Link>
-                    </span>
-                </div>
+                //<div
+                //    className='form-group'
+                //    key='signup'
+                //>
+                //    <span>
+                //        <FormattedMessage
+                //            id='login.noAccount'
+                //            defaultMessage="Don't have an account? "
+                //        />
+                //        <Link
+                //            id='signup'
+                //            to={'/signup_user_complete' + this.props.location.search}
+                //            className='signup-team-login'
+                //       >
+                //            <FormattedMessage
+                //                id='login.create'
+                //                defaultMessage='Create one now'
+                //            />
+                //        </Link>
+                //    </span>
+                //</div>
             );
         }
 
