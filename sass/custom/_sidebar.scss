@@ -3,22 +3,32 @@
 		.team-sidebar {
 			background: $sidebar-bg !important;
 		}
-		.team-wrapper {
-			.team-container {
-				&.active {
-					&:before {
-						background: $secondary-color !important;
-					}
+		.sidebar--right {
+			&.sidebar--right--expanded {
+				width: calc(100% - 325px);
+			}
+		}
+	}
+	.team-wrapper {
+		.team-container {
+			&.active {
+				&:before {
+					background: $secondary-color !important;
 				}
 			}
 		}
 	}
 	.sidebar--left {
 		background: $sidebar-bg;
+		width: 260px;
+		.team__header {
+			background: #0a4061;
+		}
 		.nav {
 			li {
 				.sidebar-item {
 					color: $white;
+					padding: 9px 30px;
 					svg {
 						fill: $white;
 					}
@@ -41,9 +51,16 @@
 							fill: $secondary-color;
 						}
 						&:before {
-							background: $secondary-color;
+							display: none;
+						}
+						&:hover {
+							background-color: transparent;
+							color: $secondary-color;
 						}
 					}
+				}
+				.nav-more {
+					padding: 9px 30px;
 				}
 			}
 		}
@@ -52,6 +69,21 @@
 				> h4 {
 					color: $white !important;
 				}
+				.nav-more {
+					&:hover {
+						background: transparent;
+						color: $secondary-color;
+					}
+				}
+				svg {
+					width: 16px;
+					height: 16px;
+				}
+			}
+		}
+		.btn {
+			&.btn-link {
+				background-color: #0a4061;
 			}
 		}
 	}
@@ -61,7 +93,7 @@
 			color: $body-color;
 		}
 		&.sidebar--right--expanded {
-			width: calc(100% - 285px);
+			width: calc(100% - 260px);
 			.sidebar-right-container {
 				background: $white !important;
 				color: $body-color;

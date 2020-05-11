@@ -208,7 +208,7 @@ export default class ChangeURLModal extends React.PureComponent<Props, State> {
                     <Modal.Footer>
                         <button
                             type='button'
-                            className='btn btn-link'
+                            className='btn btn-link cancel-button'
                             onClick={this.onCancel}
                         >
                             <FormattedMessage
