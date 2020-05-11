@@ -1,11 +1,22 @@
 .app__body {
+	.multi-teams {
+		.app__content {
+			margin-left: 325px;
+		}
+	}
 	.app__content {
 		background: $white !important;
 		color: $body-color !important;
+		margin-left: 260px;
 		.channel-header {
 			box-shadow: 0px 0px 40px 0px rgba(82, 63, 105, 0.1);
+			.markdown__link {
+				color: $primary-color;
+			}
 			.heading {
 				color: #48465b !important;
+				font-family: $font-family-secondary;
+				font-weight: 500;
 			}
 			.channel-header__icon {
 				color: $theme-color-gray !important;
@@ -24,9 +35,6 @@
 			.search-bar__container {
 				.search__form {
 					border-color: $theme-color-gray !important;
-					.search-bar {
-						color: $theme-color-gray !important;
-					}
 					.search__icon {
 						svg {
 						    stroke: $theme-color-gray !important;
@@ -85,6 +93,16 @@
 		.comment-icon__container {
 			fill: $white !important;
 		}
+		&.post--comment {
+			&.current--user {
+				.post__body {
+					border-color: $primary-color !important;
+					.post-message--collapsed {
+						padding: 10px;
+					}
+				}
+			}
+		}
 		&.current--user {
 			.post__body {
 				padding: 0;
@@ -135,7 +153,12 @@
 	    .channel-intro {
 		    padding-top: 0;
 		    .channel-intro__content {
-		    	padding: 10px 0;
+		    	padding: 10px;
+		    }
+		    .channel-intro__title,
+		    .user-popover {
+		    	font-family: $font-family-secondary;
+				font-weight: 500;
 		    }
 		}
 	}
@@ -145,10 +168,20 @@
 	    padding: 0;
 	    margin: 0;
 	}
+	.post-image__detail {
+	    color: $white;
+	}
 	.search-item-snippet {
 		padding: 0;
 	}
 	.post__header {
-		margin-bottom: 15px;
+		// margin-bottom: 15px;
+		.col__name {
+			font-family: $font-family-secondary;
+			font-weight: 500;
+		}
+	}
+	.post__pinned-badge {
+		background: $primary-color !important;
 	}
 }

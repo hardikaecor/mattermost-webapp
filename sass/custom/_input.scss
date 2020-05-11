@@ -1,11 +1,20 @@
 .app__body {
 	.modal-body,
 	.form-group {
-		.form-control {
-			background: $white;
-			border-color: lighten($theme-color-gray, 20%);
-			box-shadow: none;
-			color: $theme-color-gray;
+		@at-root {
+			.form-control, 
+			input,
+			textarea {
+				background: $white;
+				border-color: $input-border-color !important;
+				box-shadow: none;
+				color: $input-color !important;
+				font-family: $font-family-base;
+			}
+			&::-webkit-input-placeholder {
+			    color: #74788d;
+			    opacity: 1;
+			}
 		}
 	}
 }

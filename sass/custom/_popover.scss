@@ -9,10 +9,24 @@
 					&:hover {
 						background: lighten($theme-color-gray, 22%);
 						border-color: $primary-color;
+						.more-modal__name {
+						    font-weight: 500;
+						}
 					}
 					svg {
 						fill: $primary-color;
 					}
+				}
+			}
+			.more-modal__header {
+				span {
+			    	font-family: $font-family-secondary;
+			    	font-weight: 500;
+			    }
+			}
+			.more-modal__button {
+				.btn {
+					font-weight: 500;
 				}
 			}
 		}

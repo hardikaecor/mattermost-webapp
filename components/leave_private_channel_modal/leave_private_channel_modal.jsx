@@ -92,7 +92,7 @@ export default class LeavePrivateChannelModal extends React.Component {
             );
         }
 
-        const buttonClass = 'btn btn-danger';
+        const buttonClass = 'btn btn-primary';
         const button = (
             <FormattedMessage
                 id='leave_private_channel_modal.leave'

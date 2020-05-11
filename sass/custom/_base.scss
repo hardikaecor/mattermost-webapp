@@ -5,6 +5,7 @@
 
 .app__body {
 	font-family: $font-family-base;
+	font-size: 13px;
 	&.font--open_sans {
 		font-family: $font-family-base;
 	}
@@ -71,5 +72,13 @@
 			background: $primary-color;
 			color: $white;
 		}
+	}
+	strong,
+	label,
+	b,
+	.form__label,
+	.multi-select__radio .icon + span { 
+		font-family: $font-family-secondary;
+		font-weight: 500;
 	}
 }

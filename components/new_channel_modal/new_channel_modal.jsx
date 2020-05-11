@@ -448,7 +448,7 @@ export default class NewChannelModal extends React.PureComponent {
                             <button
                                 id='cancelNewChannel'
                                 type='button'
-                                className='btn btn-link'
+                                className='btn btn-link cancel-button'
                                 onClick={this.props.onModalDismissed}
                                 onBlur={() => document.getElementById('newChannelName').focus()}
                             >
