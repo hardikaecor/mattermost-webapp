@@ -148,7 +148,7 @@ export default class SelectTeam extends React.Component {
         //emitUserLoggedOutEvent('/login');
     
         e.preventDefault();
-
+        trackEvent('select_team', 'click_logout');
         let matterCookies = GlobalActions.getCookies();
         if ( matterCookies.MMCSRF != '' && matterCookies.MMCSRF != undefined)
         {
