@@ -6,5 +6,18 @@
 		&.btn-link {
 			color: $primary-color !important;
 		}
+		&.cancel-button,
+		&.btn-cancel {
+		    background-color: transparent;
+		    border: 1px solid #e2e5ec;
+		    color: #595d6e !important;
+		    &:hover,
+		    &:focus {
+		    	color: #595d6e;
+			    border-color: #e2e5ec;
+			    background-color: #f4f5f8;
+			    text-decoration: none;
+		    }
+		}
 	}
 }

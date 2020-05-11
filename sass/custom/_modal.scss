@@ -5,11 +5,15 @@
 			color: $body-color !important;
 			.modal-header {
 	    		background: $white;
-	    		border-bottom-color: $theme-color-gray;
+	    		border: 0;
+	    		border-bottom: 1px solid $theme-color-gray;
 		    	.modal-title {
 		    		color: $sidebar-bg;
+					font-family: $font-family-secondary;
+					font-weight: 500;
 		    		.name {
 		    			color: $primary-color;
+		    			font-weight: 500;
 		    		}
 		    	}
 		    	.close {
@@ -39,10 +43,21 @@
 		    					}
 		    				}
 		    			}
+		    			label {
+	    					font-weight: 500;
+		    			}
+	    			}
+	    			.section-min__title {
+	    				font-family: $font-family-secondary;
+	    				font-weight: 500;
 	    			}
 	    			.btn-cancel {
 	    				color: $primary-color;
 	    			}
+	    		}
+	    		.info__label {
+	    			font-weight: 500;
+					font-family: $font-family-secondary;
 	    		}
 			    .channel-switch__suggestion-box {
 			    	.suggestion-list__divider {
@@ -53,6 +68,13 @@
 				}
 				.suggestion-list__content {
 					background: $sidebar-bg;
+				}
+				.more-modal__list {
+					.more-modal__name {
+						font-family: $font-family-secondary;
+						font-weight: 500;
+						margin-top: 0;
+					}
 				}
 	    	}
 	    	.modal-footer {

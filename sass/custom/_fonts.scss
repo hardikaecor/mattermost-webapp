@@ -1,23 +1,21 @@
 @font-face {
-    font-family: "Neue Haas Unica Pro Light";
-    src:url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Light.eot'),
-    	url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Light.woff2') format('woff2'),
-        url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Light.woff') format('woff'),
-        // url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Light.otf') format('opentype'),
-        url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Light.ttf') format('truetype'),
-        url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Light.svg') format('svg');
+    font-family: "Neue Haas Unica W01 Light";
+    src:url('../fonts/neueHaasUnicaPro/001e59a9-197e-4fb1-9e72-cef21b186c03.eot'),
+        url('../fonts/neueHaasUnicaPro/e5716290-d41e-4c97-a27c-7a20a46ddf45.woff2') format('woff2'),
+        url('../fonts/neueHaasUnicaPro/b681571f-aab2-4935-a99c-6ee1063ce638.woff') format('woff'),
+        url('../fonts/neueHaasUnicaPro/1d88a9b0-aac0-40df-baf7-a630cd19cc5d.ttf') format('truetype');
     font-weight: lighter;
     font-style: normal;
+    font-display: fallback;
 }
 
 @font-face {
-    font-family: "Neue Haas Unica Pro Medium";
-    src:url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Medium.eot'),
-    	url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Medium.woff2') format('woff2'),
-        url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Medium.woff') format('woff'),
-        // url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Medium.otf') format('opentype'),
-        url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Medium.ttf') format('truetype'),
-        url('../fonts/neueHaasUnicaPro/NeueHaasUnicaPro-Medium.svg') format('svg');
+    font-family: "Neue Haas Unica W01 Medium It";
+    src:url('../fonts/neueHaasUnicaPro/56b738a7-54b9-4e8c-a470-d96972ab3303.eot'),
+        url('../fonts/neueHaasUnicaPro/2418a824-3af2-42d7-a62e-f7a77cf487d1.woff2') format('woff2'),
+        url('../fonts/neueHaasUnicaPro/86b76db5-9343-473a-a106-60683cec7626.woff') format('woff'),
+        url('../fonts/neueHaasUnicaPro/2b883332-01dc-4b55-ac6a-d24c84f0e334.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+    font-display: fallback;
 }

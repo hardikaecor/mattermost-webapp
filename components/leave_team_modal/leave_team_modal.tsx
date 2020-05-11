@@ -75,7 +75,7 @@ export default class LeaveTeamModal extends React.PureComponent<Props> {
                 <Modal.Footer>
                     <button
                         type='button'
-                        className='btn btn-link'
+                        className='btn btn-link cancel-button'
                         onClick={this.props.onHide}
                         id='leaveTeamNo'
                     >
@@ -86,7 +86,7 @@ export default class LeaveTeamModal extends React.PureComponent<Props> {
                     </button>
                     <button
                         type='button'
-                        className='btn btn-danger'
+                        className='btn btn-primary'
                         onClick={this.handleSubmit}
                         id='leaveTeamYes'
                     >

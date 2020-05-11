@@ -315,7 +315,7 @@ export class RenameChannelModal extends React.PureComponent {
                     <Modal.Footer>
                         <button
                             type='button'
-                            className='btn btn-link'
+                            className='btn btn-link cancel-button'
                             onClick={this.handleCancel}
                         >
                             <FormattedMessage
