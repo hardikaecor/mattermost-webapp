@@ -9,6 +9,7 @@ import {injectIntl} from 'react-intl';
 
 import {debounce} from 'mattermost-redux/actions/helpers';
 
+import {intlShape} from 'utils/react_intl';
 import * as Utils from 'utils/utils.jsx';
 
 import SearchResultsHeader from 'components/search_results_header';
@@ -109,7 +110,7 @@ class SearchResults extends React.Component {
         actions: PropTypes.shape({
             getMorePostsForSearch: PropTypes.func.isRequired,
         }),
-        intl: PropTypes.object.isRequired,
+        intl: intlShape.isRequired,
     };
 
     static defaultProps = {
@@ -266,6 +267,8 @@ class SearchResults extends React.Component {
             defaultMessage: 'Search Results',
         });
 
+        const channelName = this.props.channelDisplayName;
+
         if (this.props.isMentionSearch) {
             formattedTitle = this.props.intl.formatMessage({
                 id: 'search_header.title2',
@@ -278,10 +281,8 @@ class SearchResults extends React.Component {
             });
         } else if (this.props.isPinnedPosts) {
             formattedTitle = this.props.intl.formatMessage({
-                id: 'search_header.title4',
-                defaultMessage: 'Pinned posts in {channelDisplayName}',
-            }, {
-                channelDisplayName: this.props.channelDisplayName,
+                id: 'channel_header.pinnedPosts',
+                defaultMessage: 'Pinned Posts',
             });
         } else if (this.props.isCard) {
             formattedTitle = this.props.intl.formatMessage({
@@ -291,9 +292,13 @@ class SearchResults extends React.Component {
         }
 
         return (
-            <div className='sidebar-right__body'>
+            <div
+                id='searchContainer'
+                className='sidebar-right__body'
+            >
                 <SearchResultsHeader>
                     {formattedTitle}
+                    {channelName && <div className='sidebar--right__title__channel'>{channelName}</div>}
                 </SearchResultsHeader>
                 <Scrollbars
                     ref='scrollbars'

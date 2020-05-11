@@ -175,13 +175,13 @@ export default class LicenseSettings extends React.Component {
             // Note: DO NOT LOCALISE THESE STRINGS. Legally we can not since the license is in English.
             edition = (
                 <p>
-                    {'Mattermost Enterprise Edition. Unlock enterprise features in this software through the purchase of a subscription from '}
+                    {'Mattermost Enterprise Edition. A license is required to unlock enterprise features. Start a trial subscription at '}
                     <a
                         target='_blank'
                         rel='noopener noreferrer'
-                        href='https://mattermost.com/'
+                        href='https://mattermost.com/trial/?utm_medium=product&utm_source=product-trial'
                     >
-                        {'https://mattermost.com/'}
+                        {'https://mattermost.com/trial/'}
                     </a>
                 </p>
             );
@@ -239,12 +239,12 @@ export default class LicenseSettings extends React.Component {
                     >
                         {uploadButtonText}
                     </button>
-                    <div className='help-text no-margin'>
+                    <div className='help-text m-0'>
                         {fileName}
                     </div>
                     <br/>
                     {serverError}
-                    <p className='help-text no-margin'>
+                    <p className='help-text m-0'>
                         <FormattedMarkdownMessage
                             id='admin.license.uploadDesc'
                             defaultMessage='Upload a license key for Mattermost Enterprise Edition to upgrade this server. [Visit us online](!http://mattermost.com) to learn more about the benefits of Enterprise Edition or to purchase a key.'

@@ -12,7 +12,7 @@ import {
     removeIdpSamlCertificate, uploadIdpSamlCertificate,
     removePrivateSamlCertificate, uploadPrivateSamlCertificate,
     removePublicSamlCertificate, uploadPublicSamlCertificate,
-    invalidateAllEmailInvites, testSmtp, testSiteURL,
+    invalidateAllEmailInvites, testSmtp, testSiteURL, getSamlMetadataFromIdp, setSamlIdpCertificateFromMetadata
 } from 'actions/admin_actions';
 import SystemAnalytics from 'components/analytics/system_analytics';
 import TeamAnalytics from 'components/analytics/team_analytics';
@@ -23,6 +23,7 @@ import {trackEvent} from 'actions/diagnostics_actions.jsx';
 
 import Audits from './audits';
 import CustomUrlSchemesSetting from './custom_url_schemes_setting.jsx';
+import CustomEnableDisableGuestAccountsSetting from './custom_enable_disable_guest_accounts_setting';
 import LicenseSettings from './license_settings';
 import PermissionSchemesSettings from './permission_schemes_settings';
 import PermissionSystemSchemeSettings from './permission_schemes_settings/permission_system_scheme_settings';
@@ -294,7 +295,7 @@ const AdminDefinition = {
         groups: {
             url: 'user_management/groups',
             title: t('admin.sidebar.groups'),
-            title_default: 'Groups',
+            title_default: 'Groups (Beta)',
             isHidden: it.either(
                 it.isnt(it.licensedForFeature('LDAPGroups')),
             ),
@@ -1684,6 +1685,15 @@ const AdminDefinition = {
                         ],
                     },
                     {
+                        type: Constants.SettingsTypes.TYPE_BOOL,
+                        key: 'TeamSettings.LockTeammateNameDisplay',
+                        label: t('admin.lockTeammateNameDisplay'),
+                        label_default: 'Lock Teammate Name Display for all users: ',
+                        help_text: t('admin.lockTeammateNameDisplayHelpText'),
+                        help_text_default: 'When true, disables users\' ability to change settings under Main Menu > Account Settings > Display > Teammate Name Display.',
+                        isHidden: it.isnt(it.licensedForFeature('LockTeammateNameDisplay'))
+                    },
+                    {
                         type: Constants.SettingsTypes.TYPE_PERMISSION,
                         key: 'TeamSettings.EditOthersPosts',
                         label: t('admin.team.editOthersPostsTitle'),
@@ -1699,7 +1709,7 @@ const AdminDefinition = {
                         label: t('admin.viewArchivedChannelsTitle'),
                         label_default: 'Allow users to view archived channels: ',
                         help_text: t('admin.viewArchivedChannelsHelpText'),
-                        help_text_default: '(Experimental) When true, allows users to share permalinks and search for content of channels that have been archived. Users can only view the content in channels of which they were a member before the channel was archived.',
+                        help_text_default: '(Beta) When true, allows users to view, share and search for content of channels that have been archived. Users can only view the content in channels of which they were a member before the channel was archived.',
                     },
                     {
                         type: Constants.SettingsTypes.TYPE_BOOL,
@@ -1733,9 +1743,9 @@ const AdminDefinition = {
                         type: Constants.SettingsTypes.TYPE_BOOL,
                         key: 'TeamSettings.EnableConfirmNotificationsToChannel',
                         label: t('admin.environment.notifications.enableConfirmNotificationsToChannel.label'),
-                        label_default: 'Show @channel and @all confirmation dialog:',
+                        label_default: 'Show @channel and @all and group mention confirmation dialog:',
                         help_text: t('admin.environment.notifications.enableConfirmNotificationsToChannel.help'),
-                        help_text_default: 'When true, users will be prompted to confirm when posting @channel and @all in channels with over five members. When false, no confirmation is required.',
+                        help_text_default: 'When true, users will be prompted to confirm when posting @channel, @all and group mentions in channels with over five members. When false, no confirmation is required.',
                     },
                     {
                         type: Constants.SettingsTypes.TYPE_BOOL,
@@ -1842,23 +1852,56 @@ const AdminDefinition = {
                         label: t('admin.environment.notifications.pushContents.label'),
                         label_default: 'Push Notification Contents:',
                         help_text: t('admin.environment.notifications.pushContents.help'),
-                        help_text_default: '**Send generic description with only sender name** - Includes only the name of the person who sent the message in push notifications, with no information about channel name or message contents.\n **Send generic description with sender and channel names** - Includes the name of the person who sent the message and the channel it was sent in, but not the message text.\n **Send full message snippet** - Includes a message excerpt in push notifications, which may contain confidential information sent in messages. If your Push Notification Service is outside your firewall, it is *highly recommended* this option only be used with an "https" protocol to encrypt the connection.',
+                        help_text_default: '**Generic description with only sender name** - Includes only the name of the person who sent the message in push notifications, with no information about channel name or message contents.\n **Generic description with sender and channel names** - Includes the name of the person who sent the message and the channel it was sent in, but not the message contents.\n **Full message content sent in the notification payload** - Includes the message contents in the push notification payload that is relayed through Apple\'s Push Notification Service (APNS) or Google\'s Firebase Cloud Messaging (FCM). It is **highly recommended** this option only be used with an "https" protocol to encrypt the connection and protect confidential information sent in messages.',
                         help_text_markdown: true,
+                        isHidden: it.licensedForFeature('IDLoadedPushNotifications'),
                         options: [
                             {
                                 value: 'generic_no_channel',
                                 display_name: t('admin.environment.notifications.pushContents.genericNoChannel'),
-                                display_name_default: 'Send generic description with only sender name',
+                                display_name_default: 'Generic description with only sender name',
                             },
                             {
                                 value: 'generic',
                                 display_name: t('admin.environment.notifications.pushContents.generic'),
-                                display_name_default: 'Send generic description with sender and channel names',
+                                display_name_default: 'Generic description with sender and channel names',
                             },
                             {
                                 value: 'full',
                                 display_name: t('admin.environment.notifications.pushContents.full'),
-                                display_name_default: 'Send full message snippet',
+                                display_name_default: 'Full message content sent in the notification payload',
+                            }
+                        ],
+                    },
+                    {
+                        type: Constants.SettingsTypes.TYPE_DROPDOWN,
+                        key: 'EmailSettings.PushNotificationContents',
+                        label: t('admin.environment.notifications.pushContents.label'),
+                        label_default: 'Push Notification Contents:',
+                        help_text: t('admin.environment.notifications.pushContents.withIdLoaded.help'),
+                        help_text_default: '**Generic description with only sender name** - Includes only the name of the person who sent the message in push notifications, with no information about channel name or message contents.\n **Generic description with sender and channel names** - Includes the name of the person who sent the message and the channel it was sent in, but not the message contents.\n **Full message content sent in the notification payload** - Includes the message contents in the push notification payload that is relayed through Apple\'s Push Notification Service (APNS) or Google\'s Firebase Cloud Messaging (FCM). It is **highly recommended** this option only be used with an "https" protocol to encrypt the connection and protect confidential information sent in messages.\n **Full message content fetched from the server on receipt** - The notification payload relayed through APNS or FCM contains no message content, instead it contains a unique message ID used to fetch message content from the server when a push notification is received by a device. If the server cannot be reached, a generic notification will be displayed.',
+                        help_text_markdown: true,
+                        isHidden: it.isnt(it.licensedForFeature('IDLoadedPushNotifications')),
+                        options: [
+                            {
+                                value: 'generic_no_channel',
+                                display_name: t('admin.environment.notifications.pushContents.genericNoChannel'),
+                                display_name_default: 'Generic description with only sender name',
+                            },
+                            {
+                                value: 'generic',
+                                display_name: t('admin.environment.notifications.pushContents.generic'),
+                                display_name_default: 'Generic description with sender and channel names',
+                            },
+                            {
+                                value: 'full',
+                                display_name: t('admin.environment.notifications.pushContents.full'),
+                                display_name_default: 'Full message content sent in the notification payload',
+                            },
+                            {
+                                value: 'id_loaded',
+                                display_name: t('admin.environment.notifications.pushContents.idLoaded'),
+                                display_name_default: 'Full message content fetched from the server on receipt',
                             },
                         ],
                     },
@@ -2166,9 +2209,6 @@ const AdminDefinition = {
                         label_default: 'Require Email Verification: ',
                         help_text: t('admin.email.requireVerificationDescription'),
                         help_text_default: 'Typically set to true in production. When true, Mattermost requires email verification after account creation prior to allowing login. Developers may set this field to false to skip sending verification emails for faster development.',
-                        disabled_help_text: t('admin.security.requireEmailVerification.disabled'),
-                        disabled_help_text_default: 'Email verification cannot be changed while sending emails is disabled.',
-                        isDisabled: (config) => !config.EmailSettings.SendEmailNotifications,
                     },
                     {
                         type: Constants.SettingsTypes.TYPE_BOOL,
@@ -2399,13 +2439,44 @@ const AdminDefinition = {
                         label: t('admin.ldap.guestFilterTitle'),
                         label_default: 'Guest Filter:',
                         help_text: t('admin.ldap.guestFilterFilterDesc'),
-                        help_text_default: '(Optional) Enter an AD/LDAP filter to use when searching for guest objects. Only the users selected by the query will be able to access Mattermost as Guests. Guests are prevented from accessing teams or channels upon logging in until they are assigned a team and at least one channel.\n \nNote: If this filter is removed/changed, active guests will not be promoted to a member and will retain their Guest role. Guests can be promoted in **System Console > User Management**.\n \n \nExisting members that are identified by this attribute as a guest will be demoted from a member to a guest when they are asked to login next. The next login is based upon Session lengths set in **System Console > Session Lengths**. It is highly recommend to manually demote users to guests in **System Console > User Management ** to ensure access is restricted immediately.',
+                        help_text_default: '(Optional) Requires Guest Access to be enabled before being applied. Enter an AD/LDAP filter to use when searching for guest objects. Only the users selected by the query will be able to access Mattermost as Guests. Guests are prevented from accessing teams or channels upon logging in until they are assigned a team and at least one channel.\n \nNote: If this filter is removed/changed, active guests will not be promoted to a member and will retain their Guest role. Guests can be promoted in **System Console > User Management**.\n \n \nExisting members that are identified by this attribute as a guest will be demoted from a member to a guest when they are asked to login next. The next login is based upon Session lengths set in **System Console > Session Lengths**. It is highly recommend to manually demote users to guests in **System Console > User Management ** to ensure access is restricted immediately.',
                         help_text_markdown: true,
                         placeholder: t('admin.ldap.guestFilterEx'),
                         placeholder_default: 'E.g.: "(objectClass=guests)"',
+                        isDisabled: it.either(
+                            it.configIsFalse('GuestAccountsSettings', 'Enable'),
+                            it.both(
+                                it.stateIsFalse('LdapSettings.Enable'),
+                                it.stateIsFalse('LdapSettings.EnableSync'),
+                            )
+                        ),
+                    },
+                    {
+                        type: Constants.SettingsTypes.TYPE_BOOL,
+                        key: 'LdapSettings.EnableAdminFilter',
+                        label: t('admin.ldap.enableAdminFilterTitle'),
+                        label_default: 'Enable Admin Filter:',
                         isDisabled: it.both(
                             it.stateIsFalse('LdapSettings.Enable'),
                             it.stateIsFalse('LdapSettings.EnableSync'),
+                        ),
+                    },
+                    {
+                        type: Constants.SettingsTypes.TYPE_TEXT,
+                        key: 'LdapSettings.AdminFilter',
+                        label: t('admin.ldap.adminFilterTitle'),
+                        label_default: 'Admin Filter:',
+                        help_text: t('admin.ldap.adminFilterFilterDesc'),
+                        help_text_default: '(Optional) Enter an AD/LDAP filter to use for designating System Admins. The users selected by the query will have access to your Mattermost server as System Admins. By default, System Admins have complete access to the Mattermost System Console.\n \nExisting members that are identified by this attribute will be promoted from member to System Admin upon next login. The next login is based upon Session lengths set in **System Console > Session Lengths**. It is highly recommend to manually demote users to members in **System Console > User Management** to ensure access is restricted immediately.\n \nNote: If this filter is removed/changed, System Admins that were promoted via this filter will be demoted to members and will not retain access to the System Console. When this filter is not in use, System Admins can be manually promoted/demoted in **System Console > User Management**.',
+                        help_text_markdown: true,
+                        placeholder: t('admin.ldap.adminFilterEx'),
+                        placeholder_default: 'E.g.: "(objectClass=admins)"',
+                        isDisabled: it.either(
+                            it.stateIsFalse('LdapSettings.EnableAdminFilter'),
+                            it.both(
+                                it.stateIsFalse('LdapSettings.Enable'),
+                                it.stateIsFalse('LdapSettings.EnableSync'),
+                            )
                         ),
                     },
                     {
@@ -2420,6 +2491,7 @@ const AdminDefinition = {
                         placeholder: t('admin.ldap.groupFilterEx'),
                         placeholder_default: 'E.g.: "(objectClass=group)"',
                         isDisabled: it.stateIsFalse('LdapSettings.EnableSync'),
+                        isHidden: it.isnt(it.licensedForFeature('LDAPGroups'))
                     },
                     {
                         type: Constants.SettingsTypes.TYPE_TEXT,
@@ -2431,6 +2503,7 @@ const AdminDefinition = {
                         placeholder: t('admin.ldap.groupDisplayNameAttributeEx'),
                         placeholder_default: 'E.g.: "cn"',
                         isDisabled: it.stateIsFalse('LdapSettings.EnableSync'),
+                        isHidden: it.isnt(it.licensedForFeature('LDAPGroups'))
                     },
                     {
                         type: Constants.SettingsTypes.TYPE_TEXT,
@@ -2443,6 +2516,7 @@ const AdminDefinition = {
                         placeholder: t('admin.ldap.groupIdAttributeEx'),
                         placeholder_default: 'E.g.: "objectGUID" or "entryUUID"',
                         isDisabled: it.stateIsFalse('LdapSettings.EnableSync'),
+                        isHidden: it.isnt(it.licensedForFeature('LDAPGroups'))
                     },
                     {
                         type: Constants.SettingsTypes.TYPE_TEXT,
@@ -2534,10 +2608,10 @@ const AdminDefinition = {
                         label: t('admin.ldap.idAttrTitle'),
                         label_default: 'ID Attribute: ',
                         placeholder: t('admin.ldap.idAttrEx'),
-                        placeholder_default: 'E.g.: "objectGUID" or "entryUUID"',
+                        placeholder_default: 'E.g.: "objectGUID" or "uid"',
                         help_text: t('admin.ldap.idAttrDesc'),
                         help_text_markdown: true,
-                        help_text_default: 'The attribute in the AD/LDAP server used as a unique identifier in Mattermost. It should be an AD/LDAP attribute with a value that does not change such as `entryUUID` for LDAP or `objectGUID` for Active Directory. If a user\'s ID Attribute changes, it will create a new Mattermost account unassociated with their old one.\n \nIf you need to change this field after users have already logged in, use the [mattermost ldap idmigrate](!https://about.mattermost.com/default-mattermost-ldap-idmigrate) CLI tool.',
+                        help_text_default: 'The attribute in the AD/LDAP server used as a unique identifier in Mattermost. It should be an AD/LDAP attribute with a value that does not change such as `uid` for LDAP or `objectGUID` for Active Directory. If a user\'s ID Attribute changes, it will create a new Mattermost account unassociated with their old one.\n \nIf you need to change this field after users have already logged in, use the [mattermost ldap idmigrate](!https://about.mattermost.com/default-mattermost-ldap-idmigrate) CLI tool.',
                         isDisabled: it.both(
                             it.stateEquals('LdapSettings.Enable', false),
                             it.stateEquals('LdapSettings.EnableSync', false),
@@ -2620,7 +2694,7 @@ const AdminDefinition = {
                         label_default: 'AD/LDAP Test',
                         help_text: t('admin.ldap.testHelpText'),
                         help_text_markdown: true,
-                        help_text_default: 'Tests if the Mattemost server can connect to the AD/LDAP server specified. Please review "System Console > Logs" and [documentation](!https://mattermost.com/default-ldap-docs) to troubleshoot errors.',
+                        help_text_default: 'Tests if the Mattermost server can connect to the AD/LDAP server specified. Please review "System Console > Logs" and [documentation](!https://mattermost.com/default-ldap-docs) to troubleshoot errors.',
                         error_message: t('admin.ldap.testFailure'),
                         error_message_default: 'AD/LDAP Test Failure: {error}',
                         success_message: t('admin.ldap.testSuccess'),
@@ -2804,6 +2878,35 @@ const AdminDefinition = {
                     },
                     {
                         type: Constants.SettingsTypes.TYPE_TEXT,
+                        key: 'SamlSettings.IdpMetadataUrl',
+                        label: t('admin.saml.idpMetadataUrlTitle'),
+                        label_default: 'Identity Provider Metadata URL:',
+                        help_text: t('admin.saml.idpMetadataUrlDesc'),
+                        help_text_default: 'The Metadata URL for the Identity Provider you use for SAML requests',
+                        placeholder: t('admin.saml.idpMetadataUrlEx'),
+                        placeholder_default: 'E.g.: "https://idp.example.org/SAML2/saml/metadata"',
+                        isDisabled: it.stateIsFalse('SamlSettings.Enable'),
+                    },
+                    {
+                        type: Constants.SettingsTypes.TYPE_BUTTON,
+                        key: 'getSamlMetadataFromIDPButton',
+                        action: getSamlMetadataFromIdp,
+                        label: t('admin.saml.getSamlMetadataFromIDPUrl'),
+                        label_default: 'Get SAML Metadata from IdP',
+                        loading: t('admin.saml.getSamlMetadataFromIDPFetching'),
+                        loading_default: 'Fetching...',
+                        error_message: t('admin.saml.getSamlMetadataFromIDPFail'),
+                        error_message_default: 'SAML Metadata URL did not connect and pull data successfully',
+                        success_message: t('admin.saml.getSamlMetadataFromIDPSuccess'),
+                        success_message_default: 'SAML Metadata retrieved successfully. Two fields below have been updated',
+                        isDisabled: it.either(
+                            it.stateIsFalse('SamlSettings.Enable'),
+                            it.stateEquals('SamlSettings.IdpMetadataUrl', '')
+                        ),
+                        sourceUrlKey: 'SamlSettings.IdpMetadataUrl',
+                    },
+                    {
+                        type: Constants.SettingsTypes.TYPE_TEXT,
                         key: 'SamlSettings.IdpUrl',
                         label: t('admin.saml.idpUrlTitle'),
                         label_default: 'SAML SSO URL:',
@@ -2812,6 +2915,7 @@ const AdminDefinition = {
                         placeholder: t('admin.saml.idpUrlEx'),
                         placeholder_default: 'E.g.: "https://idp.example.org/SAML2/SSO/Login"',
                         isDisabled: it.stateIsFalse('SamlSettings.Enable'),
+                        setFromMetadataField: 'idp_url',
                     },
                     {
                         type: Constants.SettingsTypes.TYPE_TEXT,
@@ -2823,6 +2927,7 @@ const AdminDefinition = {
                         placeholder: t('admin.saml.idpDescriptorUrlEx'),
                         placeholder_default: 'E.g.: "https://idp.example.org/SAML2/issuer"',
                         isDisabled: it.stateIsFalse('SamlSettings.Enable'),
+                        setFromMetadataField: 'idp_descriptor_url',
                     },
                     {
                         type: Constants.SettingsTypes.TYPE_FILE_UPLOAD,
@@ -2842,7 +2947,9 @@ const AdminDefinition = {
                         isDisabled: it.stateIsFalse('SamlSettings.Enable'),
                         fileType: '.crt,.cer,.cert,.pem',
                         upload_action: uploadIdpSamlCertificate,
+                        set_action: setSamlIdpCertificateFromMetadata,
                         remove_action: removeIdpSamlCertificate,
+                        setFromMetadataField: 'idp_public_certificate',
                     },
                     {
                         type: Constants.SettingsTypes.TYPE_BOOL,
@@ -3043,9 +3150,34 @@ const AdminDefinition = {
                         placeholder: t('admin.saml.guestAttrEx'),
                         placeholder_default: 'E.g.: "usertype=Guest" or "isGuest=true"',
                         help_text: t('admin.saml.guestAttrDesc'),
-                        help_text_default: '(Optional) The attribute in the SAML Assertion that will be used to apply a guest role to users in Mattermost. Guests are prevented from accessing teams or channels upon logging in until they are assigned a team and at least one channel.\n \nNote: If this attribute is removed/changed from your guest user in SAML and the user is still active, they will not be promoted to a member and will retain their Guest role. Guests can be promoted in **System Console > User Management**.\n \n \nExisting members that are identified by this attribute as a guest will be demoted from a member to a guest when they are asked to login next. The next login is based upon Session lengths set in **System Console > Session Lengths**. It is highly recommend to manually demote users to guests in **System Console > User Management ** to ensure access is restricted immediately.',
+                        help_text_default: '(Optional) Requires Guest Access to be enabled before being applied. The attribute in the SAML Assertion that will be used to apply a guest role to users in Mattermost. Guests are prevented from accessing teams or channels upon logging in until they are assigned a team and at least one channel.\n \nNote: If this attribute is removed/changed from your guest user in SAML and the user is still active, they will not be promoted to a member and will retain their Guest role. Guests can be promoted in **System Console > User Management**.\n \n \nExisting members that are identified by this attribute as a guest will be demoted from a member to a guest when they are asked to login next. The next login is based upon Session lengths set in **System Console > Session Lengths**. It is highly recommend to manually demote users to guests in **System Console > User Management ** to ensure access is restricted immediately.',
                         help_text_markdown: true,
+                        isDisabled: it.either(
+                            it.configIsFalse('GuestAccountsSettings', 'Enable'),
+                            it.stateIsFalse('SamlSettings.Enable'),
+                        ),
+                    },
+                    {
+                        type: Constants.SettingsTypes.TYPE_BOOL,
+                        key: 'SamlSettings.EnableAdminAttribute',
+                        label: t('admin.saml.enableAdminAttrTitle'),
+                        label_default: 'Enable Admin Attribute:',
                         isDisabled: it.stateIsFalse('SamlSettings.Enable'),
+                    },
+                    {
+                        type: Constants.SettingsTypes.TYPE_TEXT,
+                        key: 'SamlSettings.AdminAttribute',
+                        label: t('admin.saml.adminAttrTitle'),
+                        label_default: 'Admin Attribute:',
+                        placeholder: t('admin.saml.adminAttrEx'),
+                        placeholder_default: 'E.g.: "usertype=Admin" or "isAdmin=true"',
+                        help_text: t('admin.saml.adminAttrDesc'),
+                        help_text_default: '(Optional) The attribute in the SAML Assertion for designating System Admins. The users selected by the query will have access to your Mattermost server as System Admins. By default, System Admins have complete access to the Mattermost System Console.\n \nExisting members that are identified by this attribute will be promoted from member to System Admin upon next login. The next login is based upon Session lengths set in **System Console > Session Lengths.** It is highly recommend to manually demote users to members in **System Console > User Management** to ensure access is restricted immediately.\n \nNote: If this filter is removed/changed, System Admins that were promoted via this filter will be demoted to members and will not retain access to the System Console. When this filter is not in use, System Admins can be manually promoted/demoted in **System Console > User Management**.',
+                        help_text_markdown: true,
+                        isDisabled: it.either(
+                            it.stateIsFalse('SamlSettings.EnableAdminAttribute'),
+                            it.stateIsFalse('SamlSettings.Enable'),
+                        ),
                     },
                     {
                         type: Constants.SettingsTypes.TYPE_TEXT,
@@ -3294,7 +3426,7 @@ const AdminDefinition = {
                                 display_name_default: 'Google Apps',
                                 isHidden: it.isnt(it.licensedForFeature('GoogleOAuth')),
                                 help_text: t('admin.google.EnableMarkdownDesc'),
-                                help_text_default: '1. [Log in](!https://accounts.google.com/login) to your Google account.\n2. Go to [https://console.developers.google.com](!https://console.developers.google.com), click **Credentials** in the left hand sidebar and enter "Mattermost - your-company-name" as the **Project Name**, then click **Create**.\n3. Click the **OAuth consent screen** header and enter "Mattermost" as the **Product name shown to users**, then click **Save**.\n4. Under the **Credentials** header, click **Create credentials**, choose **OAuth client ID** and select **Web Application**.\n5. Under **Restrictions** and **Authorized redirect URIs** enter **your-mattermost-url/signup/google/complete** (example: http://localhost:8065/signup/google/complete). Click **Create**.\n6. Paste the **Client ID** and **Client Secret** to the fields below, then click **Save**.\n7. Finally, go to [Google+ API](!https://console.developers.google.com/apis/api/plus/overview") and click *Enable*. This might take a few minutes to propagate through Google`s systems.',
+                                help_text_default: '1. [Log in](!https://accounts.google.com/login) to your Google account.\n2. Go to [https://console.developers.google.com](!https://console.developers.google.com), click **Credentials** in the left hand sidebar and enter "Mattermost - your-company-name" as the **Project Name**, then click **Create**.\n3. Click the **OAuth consent screen** header and enter "Mattermost" as the **Product name shown to users**, then click **Save**.\n4. Under the **Credentials** header, click **Create credentials**, choose **OAuth client ID** and select **Web Application**.\n5. Under **Restrictions** and **Authorized redirect URIs** enter **your-mattermost-url/signup/google/complete** (example: http://localhost:8065/signup/google/complete). Click **Create**.\n6. Paste the **Client ID** and **Client Secret** to the fields below, then click **Save**.\n7. Go to the [Google People API](!https://console.developers.google.com/apis/library/people.googleapis.com) and click *Enable*.',
                                 help_text_markdown: true,
                             },
                             {
@@ -3456,6 +3588,17 @@ const AdminDefinition = {
                     },
                     {
                         type: Constants.SettingsTypes.TYPE_TEXT,
+                        key: 'Office365Settings.DirectoryId',
+                        label: t('admin.office365.directoryIdTitle'),
+                        label_default: 'Directory (tenant) ID:',
+                        help_text: t('admin.office365.directoryIdDescription'),
+                        help_text_default: 'The Directory (tenant) ID you received when registering your application with Microsoft.',
+                        placeholder: t('admin.office365.directoryIdExample'),
+                        placeholder_default: 'E.g.: "adf3sfa2-ag3f-sn4n-ids0-sh1hdax192qq"',
+                        isHidden: it.isnt(it.stateEquals('oauthType', 'office365')),
+                    },
+                    {
+                        type: Constants.SettingsTypes.TYPE_TEXT,
                         key: 'Office365Settings.UserApiEndpoint',
                         label: t('admin.office365.userTitle'),
                         label_default: 'User API Endpoint:',
@@ -3468,7 +3611,12 @@ const AdminDefinition = {
                         key: 'Office365Settings.AuthEndpoint',
                         label: t('admin.office365.authTitle'),
                         label_default: 'Auth Endpoint:',
-                        dynamic_value: () => 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+                        dynamic_value: (value, config, state) => {
+                            if (state['Office365Settings.DirectoryId']) {
+                                return 'https://login.microsoftonline.com/' + state['Office365Settings.DirectoryId'] + '/oauth2/v2.0/authorize';
+                            }
+                            return 'https://login.microsoftonline.com/{directoryId}/oauth2/v2.0/authorize';
+                        },
                         isDisabled: true,
                         isHidden: it.isnt(it.stateEquals('oauthType', 'office365')),
                     },
@@ -3477,7 +3625,12 @@ const AdminDefinition = {
                         key: 'Office365Settings.TokenEndpoint',
                         label: t('admin.office365.tokenTitle'),
                         label_default: 'Token Endpoint:',
-                        dynamic_value: () => 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+                        dynamic_value: (value, config, state) => {
+                            if (state['Office365Settings.DirectoryId']) {
+                                return 'https://login.microsoftonline.com/' + state['Office365Settings.DirectoryId'] + '/oauth2/v2.0/token';
+                            }
+                            return 'https://login.microsoftonline.com/{directoryId}/oauth2/v2.0/token';
+                        },
                         isDisabled: true,
                         isHidden: it.isnt(it.stateEquals('oauthType', 'office365')),
                     },
@@ -3495,13 +3648,9 @@ const AdminDefinition = {
                 name_default: 'Guest Access (Beta)',
                 settings: [
                     {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
+                        type: Constants.SettingsTypes.TYPE_CUSTOM,
+                        component: CustomEnableDisableGuestAccountsSetting,
                         key: 'GuestAccountsSettings.Enable',
-                        label: t('admin.guest_access.enableTitle'),
-                        label_default: 'Enable Guest Access: ',
-                        help_text: t('admin.guest_access.enableDescription'),
-                        help_text_default: 'When true, external guest can be invited to channels within teams. Please see [Permissions Schemes](../user_management/permissions/system_scheme) for which roles can invite guests.',
-                        help_text_markdown: true,
                     },
                     {
                         type: Constants.SettingsTypes.TYPE_TEXT,
@@ -3576,6 +3725,10 @@ const AdminDefinition = {
                 'admin.plugin.uploadDisabledDesc',
                 'admin.plugins.settings.enableMarketplace',
                 'admin.plugins.settings.enableMarketplaceDesc',
+                'admin.plugins.settings.enableRemoteMarketplace',
+                'admin.plugins.settings.enableRemoteMarketplaceDesc',
+                'admin.plugins.settings.automaticPrepackagedPlugins',
+                'admin.plugins.settings.automaticPrepackagedPluginsDesc',
                 'admin.plugins.settings.marketplaceUrl',
                 'admin.plugins.settings.marketplaceUrlDesc',
             ],
@@ -4264,6 +4417,16 @@ const AdminDefinition = {
                         placeholder_default: 'E.g.: "teamname"',
                     },
                     {
+                        type: Constants.SettingsTypes.TYPE_BOOL,
+                        key: 'ExperimentalSettings.UseNewSAMLLibrary',
+                        label: t('admin.experimental.experimentalUseNewSAMLLibrary.title'),
+                        label_default: 'Use Improved SAML Library (Beta):',
+                        help_text: t('admin.experimental.experimentalUseNewSAMLLibrary.desc'),
+                        help_text_default: 'Enable an updated SAML Library, which does not require the XML Security Library (xmlsec1) to be installed. Warning: Not all providers have been tested. If you experience issues, please contact support: [https://about.mattermost.com/support/](!https://about.mattermost.com/support/). Changing this setting requires a server restart before taking effect.',
+                        help_text_markdown: true,
+                        isHidden: it.isnt(it.licensedForFeature('SAML'))
+                    },
+                    {
                         type: Constants.SettingsTypes.TYPE_TEXT,
                         key: 'SamlSettings.LoginButtonColor',
                         label: t('admin.experimental.samlSettingsLoginButtonColor.title'),
@@ -4294,12 +4457,38 @@ const AdminDefinition = {
                         isHidden: it.isnt(it.licensedForFeature('SAML')),
                     },
                     {
+                        type: Constants.SettingsTypes.TYPE_DROPDOWN,
+                        key: 'ServiceSettings.ExperimentalChannelSidebarOrganization',
+                        label: t('admin.experimental.experimentalChannelSidebarOrganization.title'),
+                        label_default: 'Experimental Sidebar Features',
+                        help_text: t('admin.experimental.experimentalChannelSidebarOrganization.desc'),
+                        help_text_default: 'When enabled, users can access experimental channel sidebar features, including collapsible sections and unreads filtering. If default on, this enabled the new sidebar features by default for all users on this server. Users can disable the features in **Account Settings > Sidebar > Experimental Sidebar Features**. If default off, users must enable the experimental sidebar features in Account Settings. [Learn more](!https://about.mattermost.com/default-sidebar/) or [give us feedback](!https://about.mattermost.com/default-sidebar-survey/)',
+                        help_text_markdown: true,
+                        options: [
+                            {
+                                value: 'disabled',
+                                display_name: t('admin.experimental.experimentalChannelSidebarOrganization.disabled'),
+                                display_name_default: 'Disabled',
+                            },
+                            {
+                                value: 'default_on',
+                                display_name: t('admin.experimental.experimentalChannelSidebarOrganization.default_on'),
+                                display_name_default: 'Enabled (Default On)',
+                            },
+                            {
+                                value: 'default_off',
+                                display_name: t('admin.experimental.experimentalChannelSidebarOrganization.default_off'),
+                                display_name_default: 'Enabled (Default Off)',
+                            },
+                        ],
+                    },
+                    {
                         type: Constants.SettingsTypes.TYPE_BOOL,
                         key: 'ServiceSettings.ExperimentalChannelOrganization',
                         label: t('admin.experimental.experimentalChannelOrganization.title'),
-                        label_default: 'Sidebar Organization:',
+                        label_default: 'Channel Grouping and Sorting',
                         help_text: t('admin.experimental.experimentalChannelOrganization.desc'),
-                        help_text_default: 'Enables channel sidebar organization options in **Account Settings > Sidebar > Channel grouping and sorting** including options for grouping unread channels, sorting channels by most recent post and combining all channel types into a single list.',
+                        help_text_default: 'Enables channel sidebar organization options in **Account Settings > Sidebar > Channel grouping and sorting** including options for grouping unread channels, sorting channels by most recent post and combining all channel types into a single list. These settings are not available if **Account Settings > Sidebar > Experimental Sidebar Features** are enabled.',
                         help_text_markdown: true,
                     },
                     {

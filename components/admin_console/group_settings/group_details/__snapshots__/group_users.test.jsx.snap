@@ -211,14 +211,18 @@ exports[`components/admin_console/group_settings/group_details/GroupUsers should
       disabled={true}
       onClick={[Function]}
     >
-      <injectIntl(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
       className="btn btn-link next disabled"
       disabled={true}
       onClick={[Function]}
     >
-      <injectIntl(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -435,14 +439,18 @@ exports[`components/admin_console/group_settings/group_details/GroupUsers should
       disabled={true}
       onClick={[Function]}
     >
-      <injectIntl(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
       className="btn btn-link next "
       disabled={false}
       onClick={[Function]}
     >
-      <injectIntl(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -659,14 +667,18 @@ exports[`components/admin_console/group_settings/group_details/GroupUsers should
       disabled={false}
       onClick={[Function]}
     >
-      <injectIntl(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
       className="btn btn-link next "
       disabled={false}
       onClick={[Function]}
     >
-      <injectIntl(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -883,14 +895,18 @@ exports[`components/admin_console/group_settings/group_details/GroupUsers should
       disabled={false}
       onClick={[Function]}
     >
-      <injectIntl(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
       className="btn btn-link next disabled"
       disabled={true}
       onClick={[Function]}
     >
-      <injectIntl(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -1107,14 +1123,18 @@ exports[`components/admin_console/group_settings/group_details/GroupUsers should
       disabled={true}
       onClick={[Function]}
     >
-      <injectIntl(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
       className="btn btn-link next disabled"
       disabled={true}
       onClick={[Function]}
     >
-      <injectIntl(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -1374,14 +1394,18 @@ exports[`components/admin_console/group_settings/group_details/GroupUsers should
       disabled={true}
       onClick={[Function]}
     >
-      <injectIntl(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
       className="btn btn-link next disabled"
       disabled={true}
       onClick={[Function]}
     >
-      <injectIntl(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>

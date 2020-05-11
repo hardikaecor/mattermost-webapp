@@ -158,6 +158,30 @@ export default class GroupsList extends React.PureComponent {
             );
         }
     }
+    renderHeader = () => {
+        if (this.props.groups.length === 0) {
+            return null;
+        }
+        return (
+            <div className='groups-list--header'>
+                <div className='group-name'>
+                    <FormattedMessage
+                        id='admin.group_settings.groups_list.nameHeader'
+                        defaultMessage='Name'
+                    />
+                </div>
+                <div className='group-content'>
+                    <div className='group-description'>
+                        <FormattedMessage
+                            id='admin.group_settings.groups_list.mappingHeader'
+                            defaultMessage='Mattermost Linking'
+                        />
+                    </div>
+                    <div className='group-actions'/>
+                </div>
+            </div>
+        );
+    }
 
     renderRows = () => {
         if (this.state.loading) {
@@ -415,22 +439,11 @@ export default class GroupsList extends React.PureComponent {
                         {this.renderSelectionActionButton()}
                     </div>
                 </div>
-                <div className='groups-list--header'>
-                    <div className='group-name'>
-                        <FormattedMessage
-                            id='admin.group_settings.groups_list.nameHeader'
-                            defaultMessage='Name'
-                        />
-                    </div>
-                    <div className='group-description'>
-                        <FormattedMessage
-                            id='admin.group_settings.groups_list.mappingHeader'
-                            defaultMessage='Mattermost Linking'
-                        />
-                    </div>
-                    <div className='group-actions'/>
-                </div>
-                <div className='groups-list--body'>
+                {this.renderHeader()}
+                <div
+                    id='groups-list--body'
+                    className='groups-list--body'
+                >
                     {this.renderRows()}
                 </div>
                 {total > 0 &&

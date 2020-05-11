@@ -2,12 +2,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import {shallow} from 'enzyme';
+import React from 'react';
 
-import TeamSettingsModal from 'components/team_settings_modal/team_settings_modal';
-
-require('perfect-scrollbar/jquery')($);
+import TeamSettingsModal from 'components/team_settings_modal/team_settings_modal.jsx';
 
 describe('components/team_settings_modal', () => {
     test('should match snapshot', () => {

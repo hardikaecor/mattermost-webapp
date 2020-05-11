@@ -2,16 +2,19 @@
 // See LICENSE.txt for license information.
 
 // ***************************************************************
-// - [number] indicates a test step (e.g. 1. Go to a page)
+// - [#] indicates a test step (e.g. # Go to a page)
 // - [*] indicates an assertion (e.g. * Check the title)
 // - Use element ID when selecting an element. Create one if none.
 // ***************************************************************
+
+// Stage: @prod
+// Group: @messaging
 
 describe('Compact view: Markdown quotation', () => {
     before(() => {
         // # Login and go to /
         cy.apiLogin('user-1');
-        cy.visit('/');
+        cy.visit('/ad-1/channels/town-square');
     });
 
     it('M18704-Compact view: Markdown quotation', () => {
@@ -63,7 +66,7 @@ describe('Compact view: Markdown quotation', () => {
         cy.getLastPostId().then((postId) => {
             // * Check if the message is the same sent
             cy.get(`#postMessageText_${postId} > blockquote > p`).should('be.visible').and('have.text', message.slice(1));
-            cy.getAllByTestId('postView').filter('.other--root').last().find('.user-popover').then((userElement) => {
+            cy.findAllByTestId('postView').filter('.other--root').last().find('.user-popover').then((userElement) => {
                 // # Get the username bounding rect
                 const userRect = userElement[0].getBoundingClientRect();
                 cy.get(`#postMessageText_${postId}`).find('blockquote').then((quoteElement) => {

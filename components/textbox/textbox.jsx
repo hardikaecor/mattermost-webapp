@@ -15,7 +15,7 @@ import SuggestionBox from 'components/suggestion/suggestion_box.jsx';
 import SuggestionList from 'components/suggestion/suggestion_list.jsx';
 import * as Utils from 'utils/utils.jsx';
 
-export default class Textbox extends React.Component {
+export default class Textbox extends React.PureComponent {
     static propTypes = {
         id: PropTypes.string.isRequired,
         channelId: PropTypes.string,
@@ -39,13 +39,17 @@ export default class Textbox extends React.Component {
         badConnection: PropTypes.bool,
         listenForMentionKeyClick: PropTypes.bool,
         currentUserId: PropTypes.string.isRequired,
+        currentTeamId: PropTypes.string.isRequired,
         preview: PropTypes.bool,
         profilesInChannel: PropTypes.arrayOf(PropTypes.object).isRequired,
         profilesNotInChannel: PropTypes.arrayOf(PropTypes.object).isRequired,
+        autocompleteGroups: PropTypes.arrayOf(PropTypes.object).isRequired,
         actions: PropTypes.shape({
             autocompleteUsersInChannel: PropTypes.func.isRequired,
             autocompleteChannels: PropTypes.func.isRequired,
+            searchAssociatedGroupsForReference: PropTypes.func.isRequired,
         }),
+        useChannelMentions: PropTypes.bool.isRequired,
     };
 
     static defaultProps = {
@@ -62,7 +66,10 @@ export default class Textbox extends React.Component {
                 currentUserId: this.props.currentUserId,
                 profilesInChannel: this.props.profilesInChannel,
                 profilesNotInChannel: this.props.profilesNotInChannel,
-                autocompleteUsersInChannel: (prefix) => this.props.actions.autocompleteUsersInChannel(prefix, props.channelId),
+                autocompleteUsersInChannel: (prefix) => this.props.actions.autocompleteUsersInChannel(prefix, this.props.channelId),
+                useChannelMentions: this.props.useChannelMentions,
+                autocompleteGroups: this.props.autocompleteGroups,
+                searchAssociatedGroupsForReference: (prefix) => this.props.actions.searchAssociatedGroupsForReference(prefix, this.props.currentTeamId, this.props.channelId),
             }),
             new ChannelMentionProvider(props.actions.autocompleteChannels),
             new EmoticonProvider(),
@@ -73,6 +80,7 @@ export default class Textbox extends React.Component {
         }
 
         this.checkMessageLength(props.value);
+        this.wrapper = React.createRef();
     }
 
     handleChange = (e) => {
@@ -83,16 +91,21 @@ export default class Textbox extends React.Component {
         if (this.props.channelId !== prevProps.channelId ||
             this.props.currentUserId !== prevProps.currentUserId ||
             this.props.profilesInChannel !== prevProps.profilesInChannel ||
-            this.props.profilesNotInChannel !== prevProps.profilesNotInChannel) {
+            this.props.profilesNotInChannel !== prevProps.profilesNotInChannel ||
+            this.props.autocompleteGroups !== prevProps.autocompleteGroups) {
             // Update channel id for AtMentionProvider.
             const providers = this.suggestionProviders;
             for (let i = 0; i < providers.length; i++) {
                 if (providers[i] instanceof AtMentionProvider) {
                     providers[i].setProps({
                         currentUserId: this.props.currentUserId,
+                        currentChannelId: this.props.channelId,
                         profilesInChannel: this.props.profilesInChannel,
                         profilesNotInChannel: this.props.profilesNotInChannel,
                         autocompleteUsersInChannel: (prefix) => this.props.actions.autocompleteUsersInChannel(prefix, this.props.channelId),
+                        useChannelMentions: this.props.useChannelMentions,
+                        autocompleteGroups: this.props.autocompleteGroups,
+                        searchAssociatedGroupsForReference: (prefix) => this.props.actions.searchAssociatedGroupsForReference(prefix, this.props.currentTeamId, this.props.channelId),
                     });
                 }
             }
@@ -187,11 +200,15 @@ export default class Textbox extends React.Component {
 
         let textboxClassName = 'form-control custom-textarea';
         let textWrapperClass = 'textarea-wrapper';
+        let wrapperHeight;
         if (this.props.emojiEnabled) {
             textboxClassName += ' custom-textarea--emoji-picker';
         }
         if (this.props.badConnection) {
             textboxClassName += ' bad-connection';
+        }
+        if (this.wrapper.current) {
+            wrapperHeight = this.getInputBox().clientHeight;
         }
         if (this.props.preview) {
             textboxClassName += ' custom-textarea--preview';
@@ -216,7 +233,7 @@ export default class Textbox extends React.Component {
 
         return (
             <div
-                ref='wrapper'
+                ref={this.wrapper}
                 className={textWrapperClass}
             >
                 <SuggestionBox
@@ -245,6 +262,7 @@ export default class Textbox extends React.Component {
                     disabled={this.props.disabled}
                     contextId={this.props.channelId}
                     listenForMentionKeyClick={this.props.listenForMentionKeyClick}
+                    wrapperHeight={wrapperHeight}
                 />
                 {preview}
             </div>

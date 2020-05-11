@@ -5,17 +5,19 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {FormattedHTMLMessage, FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
+import classNames from 'classnames';
+
 import PluginState from 'mattermost-redux/constants/plugins';
 
 import * as Utils from 'utils/utils.jsx';
 import LoadingScreen from 'components/loading_screen';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message.jsx';
-import ConfirmModal from 'components/confirm_modal.jsx';
+import ConfirmModal from 'components/confirm_modal';
 
 import AdminSettings from '../admin_settings';
 import BooleanSetting from '../boolean_setting';
 import SettingsGroup from '../settings_group.jsx';
-import TextSetting from '../text_setting.jsx';
+import TextSetting from '../text_setting';
 
 const PluginItemState = ({state}) => {
     switch (state) {
@@ -216,57 +218,41 @@ const PluginItem = ({
         );
     }
 
-    let removeButton;
-    if (!pluginStatus.is_prepackaged) {
-        let removeButtonText;
-        if (removing) {
-            removeButtonText = (
-                <FormattedMessage
-                    id='admin.plugin.removing'
-                    defaultMessage='Removing...'
-                />
-            );
-        } else {
-            removeButtonText = (
-                <FormattedMessage
-                    id='admin.plugin.remove'
-                    defaultMessage='Remove'
-                />
-            );
-        }
-        removeButton = (
-            <span>
-                {' - '}
-                <a
-                    data-plugin-id={pluginStatus.id}
-                    disabled={removing}
-                    onClick={handleRemove}
-                >
-                    {removeButtonText}
-                </a>
-            </span>
+    let removeButtonText;
+    if (removing) {
+        removeButtonText = (
+            <FormattedMessage
+                id='admin.plugin.removing'
+                defaultMessage='Removing...'
+            />
+        );
+    } else {
+        removeButtonText = (
+            <FormattedMessage
+                id='admin.plugin.remove'
+                defaultMessage='Remove'
+            />
         );
     }
+    const removeButton = (
+        <span>
+            {' - '}
+            <a
+                data-plugin-id={pluginStatus.id}
+                disabled={removing}
+                onClick={handleRemove}
+            >
+                {removeButtonText}
+            </a>
+        </span>
+    );
 
     let description;
     if (pluginStatus.description) {
         description = (
-            <div className='padding-top'>
+            <div className='pt-2'>
                 {pluginStatus.description}
             </div>
-        );
-    }
-
-    let prepackagedLabel;
-    if (pluginStatus.is_prepackaged) {
-        prepackagedLabel = (
-            <span>
-                {', '}
-                <FormattedMessage
-                    id='admin.plugin.prepackaged'
-                    defaultMessage='pre-packaged'
-                />
-            </span>
         );
     }
 
@@ -307,7 +293,7 @@ const PluginItem = ({
     let clusterSummary;
     if (showInstances) {
         clusterSummary = (
-            <div className='padding-top x2 padding-bottom'>
+            <div className='pt-3 pb-3'>
                 <div className='row'>
                     <div className='col-md-6'>
                         <strong>
@@ -355,18 +341,17 @@ const PluginItem = ({
     }
 
     return (
-        <div>
+        <div data-testid={pluginStatus.id}>
             <div>
                 <strong>{pluginStatus.name}</strong>
                 {' ('}
                 {pluginStatus.id}
                 {' - '}
                 {pluginStatus.version}
-                {prepackagedLabel}
                 {')'}
             </div>
             {description}
-            <div className='padding-top'>
+            <div className='pt-2'>
                 {activateButton}
                 {removeButton}
                 {settingsButton}
@@ -434,7 +419,10 @@ export default class PluginManagement extends AdminSettings {
         config.PluginSettings.EnableUploads = this.state.enableUploads;
         config.PluginSettings.AllowInsecureDownloadUrl = this.state.allowInsecureDownloadUrl;
         config.PluginSettings.EnableMarketplace = this.state.enableMarketplace;
+        config.PluginSettings.EnableRemoteMarketplace = this.state.enableRemoteMarketplace;
+        config.PluginSettings.AutomaticPrepackagedPlugins = this.state.automaticPrepackagedPlugins;
         config.PluginSettings.MarketplaceUrl = this.state.marketplaceUrl;
+        config.PluginSettings.RequirePluginSignature = this.state.requirePluginSignature;
 
         return config;
     }
@@ -445,7 +433,10 @@ export default class PluginManagement extends AdminSettings {
             enableUploads: config.PluginSettings.EnableUploads,
             allowInsecureDownloadUrl: config.PluginSettings.AllowInsecureDownloadUrl,
             enableMarketplace: config.PluginSettings.EnableMarketplace,
+            enableRemoteMarketplace: config.PluginSettings.EnableRemoteMarketplace,
+            automaticPrepackagedPlugins: config.PluginSettings.AutomaticPrepackagedPlugins,
             marketplaceUrl: config.PluginSettings.MarketplaceUrl,
+            requirePluginSignature: config.PluginSettings.RequirePluginSignature,
         };
 
         return state;
@@ -799,6 +790,9 @@ export default class PluginManagement extends AdminSettings {
         let serverError = '';
         let lastMessage = '';
 
+        // Using props values to make sure these are set on the server and not just locally
+        const enableUploadButton = enableUploads && enable && !this.props.config.PluginSettings.RequirePluginSignature;
+
         if (this.state.serverError) {
             serverError = <div className='col-sm-12'><div className='form-group has-error half'><label className='control-label'>{this.state.serverError}</label></div></div>;
         }
@@ -897,7 +891,7 @@ export default class PluginManagement extends AdminSettings {
                         <p className='help-text'>
                             <FormattedHTMLMessage
                                 id='admin.plugin.installedDesc'
-                                defaultMessage='Installed plugins on your Mattermost server. Pre-packaged plugins are installed by default, and can be disabled but not removed.'
+                                defaultMessage='Installed plugins on your Mattermost server.'
                             />
                         </p>
                         <br/>
@@ -916,7 +910,7 @@ export default class PluginManagement extends AdminSettings {
                     defaultMessage='Upload a plugin for your Mattermost server. See [documentation](!https://about.mattermost.com/default-plugin-uploads) to learn more.'
                 />
             );
-        } else if (enable === true && enableUploads === false) {
+        } else if (enable && !enableUploads) {
             uploadHelpText = (
                 <FormattedMarkdownMessage
                     id='admin.plugin.uploadDisabledDesc'
@@ -931,8 +925,6 @@ export default class PluginManagement extends AdminSettings {
                 />
             );
         }
-
-        const uploadBtnClass = enableUploads ? 'btn btn-primary' : 'btn';
 
         const overwriteUploadPluginModal = this.state.confirmOverwriteUploadModal && this.renderOverwritePluginModal({
             show: this.state.confirmOverwriteUploadModal,
@@ -955,6 +947,44 @@ export default class PluginManagement extends AdminSettings {
                     >
                         {this.renderEnablePluginsSetting()}
 
+                        <BooleanSetting
+                            id='requirePluginSignature'
+                            label={
+                                <FormattedMessage
+                                    id='admin.plugins.settings.requirePluginSignature'
+                                    defaultMessage='Require Plugin Signature:'
+                                />
+                            }
+                            helpText={
+                                <FormattedMarkdownMessage
+                                    id='admin.plugins.settings.requirePluginSignatureDesc'
+                                    defaultMessage='When true, uploading plugins is disabled and may only be installed through the Marketplace. Plugins are always verified during Mattermost server startup and initialization. See [documentation](!https://mattermost.com/pl/default-plugin-signing) to learn more.'
+                                />
+                            }
+                            value={this.state.requirePluginSignature}
+                            disabled={!this.state.enable}
+                            onChange={this.handleChange}
+                            setByEnv={this.isSetByEnv('PluginSettings.RequirePluginSignature')}
+                        />
+                        <BooleanSetting
+                            id='automaticPrepackagedPlugins'
+                            label={
+                                <FormattedMessage
+                                    id='admin.plugins.settings.automaticPrepackagedPlugins'
+                                    defaultMessage='Enable Automatic Prepackaged Plugins:'
+                                />
+                            }
+                            helpText={
+                                <FormattedMarkdownMessage
+                                    id='admin.plugins.settings.automaticPrepackagedPluginsDesc'
+                                    defaultMessage='When true, automatically installs any prepackaged plugin found to be enabled in the server configuration.'
+                                />
+                            }
+                            value={this.state.automaticPrepackagedPlugins}
+                            disabled={!this.state.enable}
+                            onChange={this.handleChange}
+                            setByEnv={this.isSetByEnv('PluginSettings.AutomaticPrepackagedPlugins')}
+                        />
                         <div className='form-group'>
                             <label
                                 className='control-label col-sm-4'
@@ -967,8 +997,8 @@ export default class PluginManagement extends AdminSettings {
                             <div className='col-sm-8'>
                                 <div className='file__upload'>
                                     <button
-                                        className={uploadBtnClass}
-                                        disabled={!enableUploads || !enable}
+                                        className={classNames(['btn', {'btn-primary': enableUploads}])}
+                                        disabled={!enableUploadButton}
                                     >
                                         <FormattedMessage
                                             id='admin.plugin.choose'
@@ -980,17 +1010,18 @@ export default class PluginManagement extends AdminSettings {
                                         type='file'
                                         accept='.gz'
                                         onChange={this.handleUpload}
-                                        disabled={!enableUploads || !enable}
+                                        disabled={!enableUploadButton}
                                     />
                                 </div>
                                 <button
                                     className={btnClass}
+                                    id='uploadPlugin'
                                     disabled={!this.state.fileSelected}
                                     onClick={this.handleSubmitUpload}
                                 >
                                     {uploadButtonText}
                                 </button>
-                                <div className='help-text no-margin'>
+                                <div className='help-text m-0'>
                                     {fileName}
                                 </div>
                                 {serverError}
@@ -1019,7 +1050,25 @@ export default class PluginManagement extends AdminSettings {
                             onChange={this.handleChange}
                             setByEnv={this.isSetByEnv('PluginSettings.EnableMarketplace')}
                         />
-
+                        <BooleanSetting
+                            id='enableRemoteMarketplace'
+                            label={
+                                <FormattedMessage
+                                    id='admin.plugins.settings.enableRemoteMarketplace'
+                                    defaultMessage='Enable Remote Marketplace:'
+                                />
+                            }
+                            helpText={
+                                <FormattedMarkdownMessage
+                                    id='admin.plugins.settings.enableRemoteMarketplaceDesc'
+                                    defaultMessage='When true, marketplace fetches latest plugins from the configured Marketplace URL.'
+                                />
+                            }
+                            value={this.state.enableRemoteMarketplace}
+                            disabled={!this.state.enable || !this.state.enableMarketplace}
+                            onChange={this.handleChange}
+                            setByEnv={this.isSetByEnv('PluginSettings.EnableRemoteMarketplace')}
+                        />
                         <TextSetting
                             id={'marketplaceUrl'}
                             type={'input'}
@@ -1031,7 +1080,7 @@ export default class PluginManagement extends AdminSettings {
                             }
                             helpText={this.getMarketplaceUrlHelpText(this.state.marketplaceUrl)}
                             value={this.state.marketplaceUrl}
-                            disabled={!this.state.enable || !this.state.enableMarketplace}
+                            disabled={!this.state.enable || !this.state.enableMarketplace || !this.state.enableRemoteMarketplace}
                             onChange={this.handleChange}
                             setByEnv={this.isSetByEnv('PluginSettings.MarketplaceUrl')}
                         />

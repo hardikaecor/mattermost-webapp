@@ -48,32 +48,8 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
     </div>
   </div>
   <div
-    className="groups-list--header"
-  >
-    <div
-      className="group-name"
-    >
-      <FormattedMessage
-        defaultMessage="Name"
-        id="admin.group_settings.groups_list.nameHeader"
-        values={Object {}}
-      />
-    </div>
-    <div
-      className="group-description"
-    >
-      <FormattedMessage
-        defaultMessage="Mattermost Linking"
-        id="admin.group_settings.groups_list.mappingHeader"
-        values={Object {}}
-      />
-    </div>
-    <div
-      className="group-actions"
-    />
-  </div>
-  <div
     className="groups-list--body"
+    id="groups-list--body"
   >
     <div
       className="groups-list-loading"
@@ -214,32 +190,8 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
     </div>
   </div>
   <div
-    className="groups-list--header"
-  >
-    <div
-      className="group-name"
-    >
-      <FormattedMessage
-        defaultMessage="Name"
-        id="admin.group_settings.groups_list.nameHeader"
-        values={Object {}}
-      />
-    </div>
-    <div
-      className="group-description"
-    >
-      <FormattedMessage
-        defaultMessage="Mattermost Linking"
-        id="admin.group_settings.groups_list.mappingHeader"
-        values={Object {}}
-      />
-    </div>
-    <div
-      className="group-actions"
-    />
-  </div>
-  <div
     className="groups-list--body"
+    id="groups-list--body"
   >
     <div
       className="groups-list-loading"
@@ -313,20 +265,25 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
       />
     </div>
     <div
-      className="group-description"
+      className="group-content"
     >
-      <FormattedMessage
-        defaultMessage="Mattermost Linking"
-        id="admin.group_settings.groups_list.mappingHeader"
-        values={Object {}}
+      <div
+        className="group-description"
+      >
+        <FormattedMessage
+          defaultMessage="Mattermost Linking"
+          id="admin.group_settings.groups_list.mappingHeader"
+          values={Object {}}
+        />
+      </div>
+      <div
+        className="group-actions"
       />
     </div>
-    <div
-      className="group-actions"
-    />
   </div>
   <div
     className="groups-list--body"
+    id="groups-list--body"
   >
     <div
       className="groups-list-loading"
@@ -359,14 +316,18 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
       disabled={true}
       onClick={null}
     >
-      <injectIntl(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
       className="btn btn-link next disabled"
       disabled={true}
       onClick={null}
     >
-      <injectIntl(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -433,20 +394,25 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
       />
     </div>
     <div
-      className="group-description"
+      className="group-content"
     >
-      <FormattedMessage
-        defaultMessage="Mattermost Linking"
-        id="admin.group_settings.groups_list.mappingHeader"
-        values={Object {}}
+      <div
+        className="group-description"
+      >
+        <FormattedMessage
+          defaultMessage="Mattermost Linking"
+          id="admin.group_settings.groups_list.mappingHeader"
+          values={Object {}}
+        />
+      </div>
+      <div
+        className="group-actions"
       />
     </div>
-    <div
-      className="group-actions"
-    />
   </div>
   <div
     className="groups-list--body"
+    id="groups-list--body"
   >
     <div
       className="groups-list-loading"
@@ -479,14 +445,18 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
       disabled={true}
       onClick={null}
     >
-      <injectIntl(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
       className="btn btn-link next disabled"
       disabled={true}
       onClick={null}
     >
-      <injectIntl(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -553,20 +523,25 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
       />
     </div>
     <div
-      className="group-description"
+      className="group-content"
     >
-      <FormattedMessage
-        defaultMessage="Mattermost Linking"
-        id="admin.group_settings.groups_list.mappingHeader"
-        values={Object {}}
+      <div
+        className="group-description"
+      >
+        <FormattedMessage
+          defaultMessage="Mattermost Linking"
+          id="admin.group_settings.groups_list.mappingHeader"
+          values={Object {}}
+        />
+      </div>
+      <div
+        className="group-actions"
       />
     </div>
-    <div
-      className="group-actions"
-    />
   </div>
   <div
     className="groups-list--body"
+    id="groups-list--body"
   >
     <div
       className="groups-list-loading"
@@ -599,14 +574,18 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
       disabled={true}
       onClick={null}
     >
-      <injectIntl(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
       className="btn btn-link next disabled"
       disabled={true}
       onClick={null}
     >
-      <injectIntl(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -672,20 +651,25 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
       />
     </div>
     <div
-      className="group-description"
+      className="group-content"
     >
-      <FormattedMessage
-        defaultMessage="Mattermost Linking"
-        id="admin.group_settings.groups_list.mappingHeader"
-        values={Object {}}
+      <div
+        className="group-description"
+      >
+        <FormattedMessage
+          defaultMessage="Mattermost Linking"
+          id="admin.group_settings.groups_list.mappingHeader"
+          values={Object {}}
+        />
+      </div>
+      <div
+        className="group-actions"
       />
     </div>
-    <div
-      className="group-actions"
-    />
   </div>
   <div
     className="groups-list--body"
+    id="groups-list--body"
   >
     <GroupRow
       actions={
@@ -756,14 +740,18 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
       disabled={true}
       onClick={null}
     >
-      <injectIntl(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
       className="btn btn-link next disabled"
       disabled={true}
       onClick={null}
     >
-      <injectIntl(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -829,20 +817,25 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
       />
     </div>
     <div
-      className="group-description"
+      className="group-content"
     >
-      <FormattedMessage
-        defaultMessage="Mattermost Linking"
-        id="admin.group_settings.groups_list.mappingHeader"
-        values={Object {}}
+      <div
+        className="group-description"
+      >
+        <FormattedMessage
+          defaultMessage="Mattermost Linking"
+          id="admin.group_settings.groups_list.mappingHeader"
+          values={Object {}}
+        />
+      </div>
+      <div
+        className="group-actions"
       />
     </div>
-    <div
-      className="group-actions"
-    />
   </div>
   <div
     className="groups-list--body"
+    id="groups-list--body"
   >
     <GroupRow
       actions={
@@ -1018,14 +1011,18 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
       disabled={true}
       onClick={null}
     >
-      <injectIntl(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
       className="btn btn-link next disabled"
       disabled={true}
       onClick={null}
     >
-      <injectIntl(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -1091,20 +1088,25 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
       />
     </div>
     <div
-      className="group-description"
+      className="group-content"
     >
-      <FormattedMessage
-        defaultMessage="Mattermost Linking"
-        id="admin.group_settings.groups_list.mappingHeader"
-        values={Object {}}
+      <div
+        className="group-description"
+      >
+        <FormattedMessage
+          defaultMessage="Mattermost Linking"
+          id="admin.group_settings.groups_list.mappingHeader"
+          values={Object {}}
+        />
+      </div>
+      <div
+        className="group-actions"
       />
     </div>
-    <div
-      className="group-actions"
-    />
   </div>
   <div
     className="groups-list--body"
+    id="groups-list--body"
   >
     <GroupRow
       actions={
@@ -1280,14 +1282,18 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
       disabled={false}
       onClick={[Function]}
     >
-      <injectIntl(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
       className="btn btn-link next disabled"
       disabled={true}
       onClick={null}
     >
-      <injectIntl(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -1353,20 +1359,25 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
       />
     </div>
     <div
-      className="group-description"
+      className="group-content"
     >
-      <FormattedMessage
-        defaultMessage="Mattermost Linking"
-        id="admin.group_settings.groups_list.mappingHeader"
-        values={Object {}}
+      <div
+        className="group-description"
+      >
+        <FormattedMessage
+          defaultMessage="Mattermost Linking"
+          id="admin.group_settings.groups_list.mappingHeader"
+          values={Object {}}
+        />
+      </div>
+      <div
+        className="group-actions"
       />
     </div>
-    <div
-      className="group-actions"
-    />
   </div>
   <div
     className="groups-list--body"
+    id="groups-list--body"
   >
     <GroupRow
       actions={
@@ -1437,14 +1448,18 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
       disabled={false}
       onClick={[Function]}
     >
-      <injectIntl(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
       className="btn btn-link next disabled"
       disabled={true}
       onClick={null}
     >
-      <injectIntl(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>
@@ -1498,32 +1513,8 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
     </div>
   </div>
   <div
-    className="groups-list--header"
-  >
-    <div
-      className="group-name"
-    >
-      <FormattedMessage
-        defaultMessage="Name"
-        id="admin.group_settings.groups_list.nameHeader"
-        values={Object {}}
-      />
-    </div>
-    <div
-      className="group-description"
-    >
-      <FormattedMessage
-        defaultMessage="Mattermost Linking"
-        id="admin.group_settings.groups_list.mappingHeader"
-        values={Object {}}
-      />
-    </div>
-    <div
-      className="group-actions"
-    />
-  </div>
-  <div
     className="groups-list--body"
+    id="groups-list--body"
   >
     <div
       className="groups-list-empty"
@@ -1598,20 +1589,25 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
       />
     </div>
     <div
-      className="group-description"
+      className="group-content"
     >
-      <FormattedMessage
-        defaultMessage="Mattermost Linking"
-        id="admin.group_settings.groups_list.mappingHeader"
-        values={Object {}}
+      <div
+        className="group-description"
+      >
+        <FormattedMessage
+          defaultMessage="Mattermost Linking"
+          id="admin.group_settings.groups_list.mappingHeader"
+          values={Object {}}
+        />
+      </div>
+      <div
+        className="group-actions"
       />
     </div>
-    <div
-      className="group-actions"
-    />
   </div>
   <div
     className="groups-list--body"
+    id="groups-list--body"
   >
     <div
       className="groups-list-loading"
@@ -1644,14 +1640,18 @@ exports[`components/admin_console/group_settings/GroupsList should match snapsho
       disabled={true}
       onClick={null}
     >
-      <injectIntl(PreviousIcon) />
+      <PreviousIcon
+        additionalClassName={null}
+      />
     </button>
     <button
       className="btn btn-link next disabled"
       disabled={true}
       onClick={null}
     >
-      <injectIntl(NextIcon) />
+      <NextIcon
+        additionalClassName={null}
+      />
     </button>
   </div>
 </div>

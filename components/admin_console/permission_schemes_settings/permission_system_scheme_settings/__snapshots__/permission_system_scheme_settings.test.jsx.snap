@@ -190,8 +190,17 @@ exports[`components/admin_console/permission_schemes_settings/permission_system_
   <div
     className="admin-console-save"
   >
-    <injectIntl(SaveButton)
+    <SaveButton
+      btnClass="btn-primary"
+      defaultMessage={
+        <FormattedMessage
+          defaultMessage="Save"
+          id="save_button.save"
+          values={Object {}}
+        />
+      }
       disabled={true}
+      extraClasses=""
       onClick={[Function]}
       saving={false}
       savingMessage="Saving Config..."
@@ -208,6 +217,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_system_
     </Connect(BlockableLink)>
     <a
       className="cancel-button reset-defaults-btn"
+      data-testid="resetPermissionsToDefault"
       onClick={[Function]}
     >
       <FormattedMessage
@@ -516,8 +526,17 @@ exports[`components/admin_console/permission_schemes_settings/permission_system_
   <div
     className="admin-console-save"
   >
-    <injectIntl(SaveButton)
+    <SaveButton
+      btnClass="btn-primary"
+      defaultMessage={
+        <FormattedMessage
+          defaultMessage="Save"
+          id="save_button.save"
+          values={Object {}}
+        />
+      }
       disabled={true}
+      extraClasses=""
       onClick={[Function]}
       saving={false}
       savingMessage="Saving Config..."
@@ -534,6 +553,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_system_
     </Connect(BlockableLink)>
     <a
       className="cancel-button reset-defaults-btn"
+      data-testid="resetPermissionsToDefault"
       onClick={[Function]}
     >
       <FormattedMessage
@@ -750,8 +770,17 @@ exports[`components/admin_console/permission_schemes_settings/permission_system_
   <div
     className="admin-console-save"
   >
-    <injectIntl(SaveButton)
+    <SaveButton
+      btnClass="btn-primary"
+      defaultMessage={
+        <FormattedMessage
+          defaultMessage="Save"
+          id="save_button.save"
+          values={Object {}}
+        />
+      }
       disabled={true}
+      extraClasses=""
       onClick={[Function]}
       saving={false}
       savingMessage="Saving Config..."
@@ -768,6 +797,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_system_
     </Connect(BlockableLink)>
     <a
       className="cancel-button reset-defaults-btn"
+      data-testid="resetPermissionsToDefault"
       onClick={[Function]}
     >
       <FormattedMessage
@@ -984,8 +1014,17 @@ exports[`components/admin_console/permission_schemes_settings/permission_system_
   <div
     className="admin-console-save"
   >
-    <injectIntl(SaveButton)
+    <SaveButton
+      btnClass="btn-primary"
+      defaultMessage={
+        <FormattedMessage
+          defaultMessage="Save"
+          id="save_button.save"
+          values={Object {}}
+        />
+      }
       disabled={true}
+      extraClasses=""
       onClick={[Function]}
       saving={false}
       savingMessage="Saving Config..."
@@ -1002,6 +1041,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_system_
     </Connect(BlockableLink)>
     <a
       className="cancel-button reset-defaults-btn"
+      data-testid="resetPermissionsToDefault"
       onClick={[Function]}
     >
       <FormattedMessage
@@ -1218,8 +1258,17 @@ exports[`components/admin_console/permission_schemes_settings/permission_system_
   <div
     className="admin-console-save"
   >
-    <injectIntl(SaveButton)
+    <SaveButton
+      btnClass="btn-primary"
+      defaultMessage={
+        <FormattedMessage
+          defaultMessage="Save"
+          id="save_button.save"
+          values={Object {}}
+        />
+      }
       disabled={true}
+      extraClasses=""
       onClick={[Function]}
       saving={false}
       savingMessage="Saving Config..."
@@ -1236,6 +1285,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_system_
     </Connect(BlockableLink)>
     <a
       className="cancel-button reset-defaults-btn"
+      data-testid="resetPermissionsToDefault"
       onClick={[Function]}
     >
       <FormattedMessage

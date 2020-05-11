@@ -6,15 +6,11 @@ exports[`components/RhsRootPost should match snapshot 1`] = `
   className="thread__root a11y__section post post--root post--thread current--user post--compact"
   data-a11y-sort-order="0"
   id="rhsPost_id"
+  onClick={[Function]}
   onFocus={[Function]}
   role="listitem"
   tabIndex="-1"
 >
-  <div
-    className="post-right-channel__name"
-  >
-    Test
-  </div>
   <div
     className="post__content"
     role="application"
@@ -79,7 +75,7 @@ exports[`components/RhsRootPost should match snapshot 1`] = `
           />
         </div>
         <div
-          className="col col__reply"
+          className="col post-menu"
         >
           <Connect(DotMenu)
             commentCount={0}
@@ -87,6 +83,7 @@ exports[`components/RhsRootPost should match snapshot 1`] = `
             handleAddReactionClick={[Function]}
             handleDropdownOpened={[Function]}
             isFlagged={false}
+            isMenuOpen={false}
             isReadOnly={false}
             location="RHS_ROOT"
             post={
@@ -186,15 +183,11 @@ exports[`components/RhsRootPost should match snapshot on deleted post 1`] = `
   className="thread__root a11y__section post post--root post--thread current--user post--compact"
   data-a11y-sort-order="0"
   id="rhsPost_id"
+  onClick={[Function]}
   onFocus={[Function]}
   role="listitem"
   tabIndex="-1"
 >
-  <div
-    className="post-right-channel__name"
-  >
-    Test
-  </div>
   <div
     className="post__content"
     role="application"
@@ -323,15 +316,11 @@ exports[`components/RhsRootPost should match snapshot on flagged, deleted post 1
   className="thread__root a11y__section post post--root post--thread current--user post--compact"
   data-a11y-sort-order="0"
   id="rhsPost_id"
+  onClick={[Function]}
   onFocus={[Function]}
   role="listitem"
   tabIndex="-1"
 >
-  <div
-    className="post-right-channel__name"
-  >
-    Test
-  </div>
   <div
     className="post__content"
     role="application"
@@ -463,15 +452,11 @@ exports[`components/RhsRootPost should match snapshot when flagged 1`] = `
   className="thread__root a11y__section post post--root post--thread current--user post--compact"
   data-a11y-sort-order="0"
   id="rhsPost_id"
+  onClick={[Function]}
   onFocus={[Function]}
   role="listitem"
   tabIndex="-1"
 >
-  <div
-    className="post-right-channel__name"
-  >
-    Test
-  </div>
   <div
     className="post__content"
     role="application"
@@ -536,7 +521,7 @@ exports[`components/RhsRootPost should match snapshot when flagged 1`] = `
           />
         </div>
         <div
-          className="col col__reply"
+          className="col post-menu"
         >
           <Connect(DotMenu)
             commentCount={0}
@@ -544,6 +529,7 @@ exports[`components/RhsRootPost should match snapshot when flagged 1`] = `
             handleAddReactionClick={[Function]}
             handleDropdownOpened={[Function]}
             isFlagged={true}
+            isMenuOpen={false}
             isReadOnly={false}
             location="RHS_ROOT"
             post={

@@ -5,6 +5,7 @@ exports[`components/RhsComment should match snapshot 1`] = `
   aria-label=""
   className="a11y__section post post--thread same--root post--comment current--user post--compact"
   id="rhsPost_id"
+  onClick={[Function]}
   onFocus={[Function]}
   onMouseLeave={[Function]}
   onMouseOver={[Function]}
@@ -140,6 +141,7 @@ exports[`components/RhsComment should match snapshot hovered 1`] = `
   aria-label=""
   className="a11y__section post post--thread same--root post--comment current--user post--compact"
   id="rhsPost_id"
+  onClick={[Function]}
   onFocus={[Function]}
   onMouseLeave={[Function]}
   onMouseOver={[Function]}
@@ -210,13 +212,14 @@ exports[`components/RhsComment should match snapshot hovered 1`] = `
           />
         </div>
         <div
-          className="col col__reply"
+          className="col post-menu"
         >
           <Connect(DotMenu)
             enableEmojiPicker={true}
             handleAddReactionClick={[Function]}
             handleDropdownOpened={[Function]}
             isFlagged={true}
+            isMenuOpen={false}
             isReadOnly={false}
             location="RHS_COMMENT"
             post={
@@ -315,6 +318,7 @@ exports[`components/RhsComment should match snapshot hovered on deleted post 1`]
   aria-label=""
   className="a11y__section post post--thread same--root post--comment current--user post--compact"
   id="rhsPost_id"
+  onClick={[Function]}
   onFocus={[Function]}
   onMouseLeave={[Function]}
   onMouseOver={[Function]}
@@ -464,6 +468,7 @@ exports[`components/RhsComment should match snapshot mobile 1`] = `
   aria-label=""
   className="a11y__section post post--thread same--root post--comment current--user post--compact"
   id="rhsPost_id"
+  onClick={[Function]}
   onFocus={[Function]}
   onMouseLeave={[Function]}
   onMouseOver={[Function]}
@@ -534,13 +539,14 @@ exports[`components/RhsComment should match snapshot mobile 1`] = `
           />
         </div>
         <div
-          className="col col__reply"
+          className="col post-menu"
         >
           <Connect(DotMenu)
             enableEmojiPicker={true}
             handleAddReactionClick={[Function]}
             handleDropdownOpened={[Function]}
             isFlagged={true}
+            isMenuOpen={false}
             isReadOnly={false}
             location="RHS_COMMENT"
             post={

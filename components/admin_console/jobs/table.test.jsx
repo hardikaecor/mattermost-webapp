@@ -73,16 +73,14 @@ describe('components/admin_console/jobs/table', () => {
             id: '1236',
             status: 'error',
             type: 'data_retention',
+        }, {
+            created_at: 1540834294674,
+            last_activity_at: 1540834294674,
+            id: '1236',
+            status: 'warning',
+            type: 'data_retention',
         }],
     };
-
-    test('should match snapshot, init', () => {
-        const wrapper = shallowWithIntl(
-            <JobTable {...baseProps}/>
-        );
-
-        expect(wrapper).toMatchSnapshot();
-    });
 
     test('should call create job func', () => {
         const wrapper = shallowWithIntl(

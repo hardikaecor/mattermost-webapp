@@ -4,6 +4,7 @@
 import React from 'react';
 
 import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
+import {testComponentForLineBreak} from 'tests/helpers/line_break_helpers';
 
 import Constants from 'utils/constants';
 import EditChannelHeaderModal from 'components/edit_channel_header_modal/edit_channel_header_modal.jsx';
@@ -31,8 +32,11 @@ describe('components/EditChannelHeaderModal', () => {
     const baseProps = {
         channel,
         ctrlSend: false,
+        show: false,
+        shouldShowPreview: false,
         actions: {
             closeModal: jest.fn(),
+            setShowPreview: jest.fn(),
             patchChannel: jest.fn().mockResolvedValueOnce({error: serverError}).mockResolvedValue({}),
         },
     };
@@ -199,4 +203,14 @@ describe('components/EditChannelHeaderModal', () => {
 
         expect(baseProps.actions.patchChannel).toBeCalledWith('fake-id', {header: newHeader});
     });
+
+    testComponentForLineBreak((value) => (
+        <EditChannelHeaderModal
+            {...baseProps}
+            channel={{
+                ...baseProps.channel,
+                header: value,
+            }}
+        />
+    ), (instance) => instance.state().header);
 });

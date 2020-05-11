@@ -1,8 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import {shallow} from 'enzyme';
+import React from 'react';
 
 import DotMenu from 'components/dot_menu/dot_menu.jsx';
 
@@ -28,6 +28,9 @@ describe('components/dot_menu/DotMenu on mobile view', () => {
             isLicensed: false,
             postEditTimeLimit: '-1',
             enableEmojiPicker: true,
+            components: {},
+            channelIsArchived: false,
+            currentTeamUrl: '',
             actions: {
                 flagPost: jest.fn(),
                 unflagPost: jest.fn(),
@@ -35,7 +38,10 @@ describe('components/dot_menu/DotMenu on mobile view', () => {
                 pinPost: jest.fn(),
                 unpinPost: jest.fn(),
                 openModal: jest.fn(),
+                markPostAsUnread: jest.fn(),
             },
+            canEdit: false,
+            canDelete: false,
         };
 
         const wrapper = shallow(

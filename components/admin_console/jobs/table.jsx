@@ -6,6 +6,7 @@ import React from 'react';
 import {FormattedDate, FormattedMessage, FormattedTime, injectIntl} from 'react-intl';
 
 import {JobStatuses} from 'utils/constants';
+import {intlShape} from 'utils/react_intl';
 import * as Utils from 'utils/utils.jsx';
 
 class JobTable extends React.PureComponent {
@@ -14,7 +15,7 @@ class JobTable extends React.PureComponent {
         /**
          * Used for formatting dates
          */
-        intl: PropTypes.any,
+        intl: intlShape.isRequired,
 
         /**
          * Array of jobs
@@ -111,6 +112,18 @@ class JobTable extends React.PureComponent {
                     <FormattedMessage
                         id='admin.jobTable.statusSuccess'
                         defaultMessage='Success'
+                    />
+                </span>
+            );
+        } else if (job.status === JobStatuses.WARNING) {
+            return (
+                <span
+                    className='status-icon-warning'
+                    title={formatMessage({id: 'admin.jobTable.jobId', defaultMessage: 'Job ID: '}) + job.id}
+                >
+                    <FormattedMessage
+                        id='admin.jobTable.statusWarning'
+                        defaultMessage='Warning'
                     />
                 </span>
             );
@@ -335,7 +348,10 @@ class JobTable extends React.PureComponent {
                     </div>
                 </div>
                 <div className='job-table__table'>
-                    <table className='table'>
+                    <table
+                        className='table'
+                        data-testid='jobTable'
+                    >
                         <thead>
                             <tr>
                                 <th width='30px'/>

@@ -7,6 +7,9 @@
 // - Use element ID when selecting an element. Create one if none.
 // ***************************************************************
 
+// Stage: @prod
+// Group: @guest_account
+
 /**
  * Note: This test requires Enterprise license to be uploaded
  */
@@ -16,6 +19,10 @@ let guest;
 
 describe('Guest Account - Guest User Experience', () => {
     before(() => {
+        // * Check if server has license for Guest Accounts
+        cy.apiLogin('sysadmin');
+        cy.requireLicenseForFeature('GuestAccounts');
+
         // # Enable Guest Account Settings
         cy.apiUpdateConfig({
             GuestAccountsSettings: {
@@ -27,9 +34,9 @@ describe('Guest Account - Guest User Experience', () => {
         });
 
         // # Login as a guest user and go to /
-        cy.loginAsNewGuestUser().then((userResponse) => {
-            guest = userResponse;
-            cy.visit('/');
+        cy.loginAsNewGuestUser().then(({user, team}) => {
+            guest = user;
+            cy.visit(`/${team.name}/channels/town-square`);
         });
     });
 
@@ -46,7 +53,7 @@ describe('Guest Account - Guest User Experience', () => {
         });
 
         // *Verify Reduced Options in LHS
-        const missingLHSOptions = ['#createPublicChannel', '#morePublicButton', '#createPrivateChannel'];
+        const missingLHSOptions = ['#createPublicChannel', "li[data-testid='morePublicButton']", '#createPrivateChannel'];
         missingLHSOptions.forEach((missingOption) => {
             cy.get(missingOption).should('not.exist');
         });
@@ -125,7 +132,7 @@ describe('Guest Account - Guest User Experience', () => {
         cy.get('#sidebarHeaderDropdownButton').should('be.visible').click();
 
         // *Verify Options in LHS are changed
-        const missingLHSOptions = ['#createPublicChannel', '#morePublicButton', '#createPrivateChannel'];
+        const missingLHSOptions = ['#createPublicChannel', "li[data-testid='morePublicButton']", '#createPrivateChannel'];
         missingLHSOptions.forEach((missingOption) => {
             cy.get(missingOption).should('be.visible');
         });
