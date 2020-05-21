@@ -13,8 +13,7 @@ import LocalStorageStore from 'stores/local_storage_store';
 
 import {browserHistory} from 'utils/browser_history';
 import Constants from 'utils/constants.jsx';
-import messageHtmlToComponent from 'utils/message_html_to_component';
-import * as TextFormatting from 'utils/text_formatting.jsx';
+import {intlShape} from 'utils/react_intl';
 import * as Utils from 'utils/utils.jsx';
 import {showNotification} from 'utils/notifications';
 import {t} from 'utils/i18n.jsx';
@@ -25,18 +24,19 @@ import SiteNameAndDescription from 'components/common/site_name_and_description'
 import AnnouncementBar from 'components/announcement_bar';
 import FormError from 'components/form_error';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message.jsx';
-import BackButton from 'components/common/back_button.jsx';
+import BackButton from 'components/common/back_button';
 import LoadingScreen from 'components/loading_screen';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
 import SuccessIcon from 'components/widgets/icons/fa_success_icon';
 import WarningIcon from 'components/widgets/icons/fa_warning_icon';
 import LocalizedInput from 'components/localized_input/localized_input';
+import Markdown from 'components/markdown';
 
 import LoginMfa from '../login_mfa.jsx';
 
 class LoginController extends React.Component {
     static propTypes = {
-        intl: PropTypes.any,
+        intl: intlShape.isRequired,
 
         location: PropTypes.object.isRequired,
         isLicensed: PropTypes.bool.isRequired,
@@ -359,7 +359,6 @@ class LoginController extends React.Component {
     createCustomLogin = () => {
         if (this.props.enableCustomBrand) {
             const text = this.props.customBrandText || '';
-            const formattedText = TextFormatting.formatText(text);
             const brandImageUrl = Client4.getBrandImageUrl(0);
             const brandImageStyle = this.state.brandImageError ? {display: 'none'} : {};
 
@@ -372,7 +371,13 @@ class LoginController extends React.Component {
                         style={brandImageStyle}
                     />
                     <div>
-                        {messageHtmlToComponent(formattedText, false, {mentions: false, imagesMetadata: null})}
+                        <Markdown
+                            message={text}
+                            options={
+                                {mentions: false,
+                                    imagesMetadata: null}
+                            }
+                        />
                     </div>
                 </div>
             );
@@ -604,44 +609,44 @@ class LoginController extends React.Component {
 
         if (this.props.enableOpenServer && this.checkSignUpEnabled()) {
             loginControls.push(
-                <div
-                    className='form-group'
-                    key='signup'
-                >
-                    <span>
-                        <FormattedMessage
-                            id='login.noAccount'
-                            defaultMessage="Don't have an account? "
-                        />
-                        <Link
-                            id='signup'
-                            to={'/signup_user_complete' + this.props.location.search}
-                            className='signup-team-login'
-                        >
-                            <FormattedMessage
-                                id='login.create'
-                                defaultMessage='Create one now'
-                            />
-                        </Link>
-                    </span>
-                </div>
+                //<div
+                //    className='form-group'
+                //    key='signup'
+                //>
+                //    <span>
+                //        <FormattedMessage
+                //            id='login.noAccount'
+                //            defaultMessage="Don't have an account? "
+                //        />
+                //        <Link
+                //            id='signup'
+                //            to={'/signup_user_complete' + this.props.location.search}
+                //            className='signup-team-login'
+                //       >
+                //            <FormattedMessage
+                //                id='login.create'
+                //                defaultMessage='Create one now'
+                //            />
+                //        </Link>
+                //    </span>
+                //</div>
             );
         }
 
         if (usernameSigninEnabled || emailSigninEnabled) {
             loginControls.push(
-                // <div
-                //     id='login_forgot'
-                //     key='forgotPassword'
-                //     className='form-group'
-                // >
-                //     <Link to={'/reset_password'}>
-                //         <FormattedMessage
-                //             id='login.forgot'
-                //             defaultMessage='I forgot my password'
-                //         />
-                //     </Link>
-                // </div>
+                //<div
+                //    id='login_forgot'
+                //    key='forgotPassword'
+                //    className='form-group'
+                //>
+                //   <Link to={'/reset_password'}>
+                //        <FormattedMessage
+                //            id='login.forgot'
+                //            defaultMessage='I forgot my password.'
+                //        />
+                //    </Link>
+                //</div>
             );
         }
 

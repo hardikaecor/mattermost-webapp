@@ -1,10 +1,10 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {shallow} from 'enzyme';
 import React from 'react';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
-import {shallow} from 'enzyme';
 
 import {getTeam} from 'mattermost-redux/selectors/entities/teams';
 

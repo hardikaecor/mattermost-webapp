@@ -165,7 +165,7 @@ exports[`components/admin_console/CustomPluginSettings should match snapshot wit
             setByEnv={false}
             value=""
           />
-          <UserAutocompleteSetting
+          <Connect(UserAutocompleteSetting)
             disabled={false}
             helpText={
               <SchemaText
@@ -197,8 +197,17 @@ exports[`components/admin_console/CustomPluginSettings should match snapshot wit
   <div
     className="admin-console-save"
   >
-    <injectIntl(SaveButton)
+    <SaveButton
+      btnClass="btn-primary"
+      defaultMessage={
+        <FormattedMessage
+          defaultMessage="Save"
+          id="save_button.save"
+          values={Object {}}
+        />
+      }
       disabled={true}
+      extraClasses=""
       onClick={[Function]}
       saving={false}
       savingMessage="Saving Config..."
@@ -208,6 +217,12 @@ exports[`components/admin_console/CustomPluginSettings should match snapshot wit
       onMouseOut={[Function]}
       onMouseOver={[Function]}
     >
+      <FormError
+        error=""
+        errors={Array []}
+        iconClassName="fa-exclamation-triangle"
+        textClassName="has-warning"
+      />
       <FormError
         error={null}
         errors={Array []}
@@ -258,8 +273,17 @@ exports[`components/admin_console/CustomPluginSettings should match snapshot wit
   <div
     className="admin-console-save"
   >
-    <injectIntl(SaveButton)
+    <SaveButton
+      btnClass="btn-primary"
+      defaultMessage={
+        <FormattedMessage
+          defaultMessage="Save"
+          id="save_button.save"
+          values={Object {}}
+        />
+      }
       disabled={true}
+      extraClasses=""
       onClick={[Function]}
       saving={false}
       savingMessage="Saving Config..."
@@ -269,6 +293,12 @@ exports[`components/admin_console/CustomPluginSettings should match snapshot wit
       onMouseOut={[Function]}
       onMouseOver={[Function]}
     >
+      <FormError
+        error=""
+        errors={Array []}
+        iconClassName="fa-exclamation-triangle"
+        textClassName="has-warning"
+      />
       <FormError
         error={null}
         errors={Array []}
@@ -456,7 +486,7 @@ exports[`components/admin_console/CustomPluginSettings should match snapshot wit
             setByEnv={false}
             value="Q6DHXrFLOIS5sOI5JNF4PyDLqWm7vh23"
           />
-          <UserAutocompleteSetting
+          <Connect(UserAutocompleteSetting)
             disabled={false}
             helpText={
               <SchemaText
@@ -488,8 +518,17 @@ exports[`components/admin_console/CustomPluginSettings should match snapshot wit
   <div
     className="admin-console-save"
   >
-    <injectIntl(SaveButton)
+    <SaveButton
+      btnClass="btn-primary"
+      defaultMessage={
+        <FormattedMessage
+          defaultMessage="Save"
+          id="save_button.save"
+          values={Object {}}
+        />
+      }
       disabled={true}
+      extraClasses=""
       onClick={[Function]}
       saving={false}
       savingMessage="Saving Config..."
@@ -499,6 +538,12 @@ exports[`components/admin_console/CustomPluginSettings should match snapshot wit
       onMouseOut={[Function]}
       onMouseOver={[Function]}
     >
+      <FormError
+        error=""
+        errors={Array []}
+        iconClassName="fa-exclamation-triangle"
+        textClassName="has-warning"
+      />
       <FormError
         error={null}
         errors={Array []}

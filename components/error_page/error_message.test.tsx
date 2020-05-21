@@ -50,6 +50,15 @@ describe('components/error_page/ErrorMessage', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should match snapshot, oauth_invalid_param type', () => {
+        const props = {...baseProps, type: ErrorPageTypes.OAUTH_INVALID_PARAM, message: 'error message'};
+        const wrapper = shallow(
+            <ErrorMessage {...props}/>
+        );
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
     test('should match snapshot, page_not_found type', () => {
         const props = {...baseProps, type: ErrorPageTypes.PAGE_NOT_FOUND};
         const wrapper = shallow(
@@ -75,6 +84,15 @@ describe('components/error_page/ErrorMessage', () => {
         );
 
         expect(wrapper).toMatchSnapshot();
+
+        const wrapper2 = shallow(
+            <ErrorMessage
+                {...props}
+                isGuest={true}
+            />
+        );
+
+        expect(wrapper2).toMatchSnapshot();
     });
 
     test('should match snapshot, no type but with message', () => {

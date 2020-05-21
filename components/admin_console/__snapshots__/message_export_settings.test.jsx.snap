@@ -142,8 +142,17 @@ exports[`components/MessageExportSettings should match snapshot, disabled, actia
     <div
       className="admin-console-save"
     >
-      <injectIntl(SaveButton)
+      <SaveButton
+        btnClass="btn-primary"
+        defaultMessage={
+          <FormattedMessage
+            defaultMessage="Save"
+            id="save_button.save"
+            values={Object {}}
+          />
+        }
         disabled={true}
+        extraClasses=""
         onClick={[Function]}
         saving={false}
         savingMessage="Saving Config..."
@@ -423,8 +432,17 @@ exports[`components/MessageExportSettings should match snapshot, disabled, globa
     <div
       className="admin-console-save"
     >
-      <injectIntl(SaveButton)
+      <SaveButton
+        btnClass="btn-primary"
+        defaultMessage={
+          <FormattedMessage
+            defaultMessage="Save"
+            id="save_button.save"
+            values={Object {}}
+          />
+        }
         disabled={true}
+        extraClasses=""
         onClick={[Function]}
         saving={false}
         savingMessage="Saving Config..."
@@ -598,8 +616,17 @@ exports[`components/MessageExportSettings should match snapshot, enabled, actian
     <div
       className="admin-console-save"
     >
-      <injectIntl(SaveButton)
+      <SaveButton
+        btnClass="btn-primary"
+        defaultMessage={
+          <FormattedMessage
+            defaultMessage="Save"
+            id="save_button.save"
+            values={Object {}}
+          />
+        }
         disabled={true}
+        extraClasses=""
         onClick={[Function]}
         saving={false}
         savingMessage="Saving Config..."
@@ -879,8 +906,17 @@ exports[`components/MessageExportSettings should match snapshot, enabled, global
     <div
       className="admin-console-save"
     >
-      <injectIntl(SaveButton)
+      <SaveButton
+        btnClass="btn-primary"
+        defaultMessage={
+          <FormattedMessage
+            defaultMessage="Save"
+            id="save_button.save"
+            values={Object {}}
+          />
+        }
         disabled={true}
+        extraClasses=""
         onClick={[Function]}
         saving={false}
         savingMessage="Saving Config..."

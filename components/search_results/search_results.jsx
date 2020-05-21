@@ -9,7 +9,9 @@ import {injectIntl} from 'react-intl';
 
 import {debounce} from 'mattermost-redux/actions/helpers';
 
+import {intlShape} from 'utils/react_intl';
 import * as Utils from 'utils/utils.jsx';
+import {searchHintOptions} from 'utils/constants';
 
 import SearchResultsHeader from 'components/search_results_header';
 import SearchResultsItem from 'components/search_results_item';
@@ -106,10 +108,11 @@ class SearchResults extends React.Component {
         dataRetentionEnableMessageDeletion: PropTypes.bool.isRequired,
         dataRetentionMessageRetentionDays: PropTypes.string,
         isOpened: PropTypes.bool,
+        updateSearchTerms: PropTypes.func.isRequired,
         actions: PropTypes.shape({
             getMorePostsForSearch: PropTypes.func.isRequired,
         }),
-        intl: PropTypes.object.isRequired,
+        intl: intlShape.isRequired,
     };
 
     static defaultProps = {
@@ -213,7 +216,10 @@ class SearchResults extends React.Component {
         } else if (!searchTerms && noResults) {
             ctls = (
                 <div className='sidebar--right__subheader a11y__section'>
-                    <SearchHint/>
+                    <SearchHint
+                        onOptionSelected={this.props.updateSearchTerms}
+                        options={searchHintOptions}
+                    />
                 </div>
             );
         } else if (noResults) {
@@ -266,7 +272,14 @@ class SearchResults extends React.Component {
             defaultMessage: 'Search Results',
         });
 
-        if (this.props.isMentionSearch) {
+        const channelName = this.props.channelDisplayName;
+
+        if (!searchTerms && noResults) {
+            formattedTitle = this.props.intl.formatMessage({
+                id: 'search_bar.search',
+                defaultMessage: 'Search',
+            });
+        } else if (this.props.isMentionSearch) {
             formattedTitle = this.props.intl.formatMessage({
                 id: 'search_header.title2',
                 defaultMessage: 'Recent Mentions',
@@ -278,10 +291,8 @@ class SearchResults extends React.Component {
             });
         } else if (this.props.isPinnedPosts) {
             formattedTitle = this.props.intl.formatMessage({
-                id: 'search_header.title4',
-                defaultMessage: 'Pinned posts in {channelDisplayName}',
-            }, {
-                channelDisplayName: this.props.channelDisplayName,
+                id: 'channel_header.pinnedPosts',
+                defaultMessage: 'Pinned Posts',
             });
         } else if (this.props.isCard) {
             formattedTitle = this.props.intl.formatMessage({
@@ -291,9 +302,13 @@ class SearchResults extends React.Component {
         }
 
         return (
-            <div className='sidebar-right__body'>
+            <div
+                id='searchContainer'
+                className='sidebar-right__body'
+            >
                 <SearchResultsHeader>
                     {formattedTitle}
+                    {channelName && <div className='sidebar--right__title__channel'>{channelName}</div>}
                 </SearchResultsHeader>
                 <Scrollbars
                     ref='scrollbars'

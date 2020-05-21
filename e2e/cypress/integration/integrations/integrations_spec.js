@@ -7,11 +7,15 @@
 // - Use element ID when selecting an element. Create one if none.
 // ***************************************************************
 
-import {getRandomInt} from '../../utils';
+// Stage: @prod
+// Group: @integrations
+
+import {getRandomId} from '../../utils';
 
 describe('Integrations page', () => {
     before(() => {
-        // # Set ServiceSettings to expected values
+        // # Login as sysadmin and set ServiceSettings to expected values
+        cy.apiLogin('sysadmin');
         const newSettings = {
             ServiceSettings: {
                 EnableOAuthServiceProvider: true,
@@ -22,9 +26,6 @@ describe('Integrations page', () => {
             },
         };
         cy.apiUpdateConfig(newSettings);
-
-        // # Login as sysadmin
-        cy.apiLogin('sysadmin');
 
         // # Go to integrations
         cy.visit('/ad-1/integrations');
@@ -128,9 +129,9 @@ describe('Integrations page', () => {
         cy.get('#addOauthApp').click();
 
         // # Fill in dummy details
-        cy.get('#name').type(`test-name${getRandomInt(10000)}`);
-        cy.get('#description').type(`test-descr${getRandomInt(10000)}`);
-        cy.get('#homepage').type(`https://dummy${getRandomInt(10000)}`);
+        cy.get('#name').type(`test-name${getRandomId()}`);
+        cy.get('#description').type(`test-descr${getRandomId()}`);
+        cy.get('#homepage').type(`https://dummy${getRandomId()}`);
         cy.get('#callbackUrls').type('https://dummy');
 
         // # Save
@@ -158,7 +159,7 @@ describe('Integrations page', () => {
         cy.get('#addBotAccount').click();
 
         // # Fill in dummy details
-        cy.get('#username').type(`test-bot${getRandomInt(10000)}`);
+        cy.get('#username').type(`test-bot${getRandomId()}`);
 
         // # Save
         cy.get('#saveBot').click();

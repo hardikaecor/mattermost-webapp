@@ -15,9 +15,11 @@ export default class ActionMenu extends React.PureComponent {
         postId: PropTypes.string.isRequired,
         action: PropTypes.object.isRequired,
         selected: PropTypes.object,
+        disabled: PropTypes.bool,
         actions: PropTypes.shape({
             autocompleteChannels: PropTypes.func.isRequired,
             selectAttachmentMenuAction: PropTypes.func.isRequired,
+            autocompleteUsers: PropTypes.func.isRequired,
         }).isRequired,
     }
 
@@ -28,7 +30,7 @@ export default class ActionMenu extends React.PureComponent {
         this.providers = [];
         if (action) {
             if (action.data_source === 'users') {
-                this.providers = [new GenericUserProvider()];
+                this.providers = [new GenericUserProvider(props.actions.autocompleteUsers)];
             } else if (action.data_source === 'channels') {
                 this.providers = [new GenericChannelProvider(props.actions.autocompleteChannels)];
             } else if (action.options) {
@@ -87,7 +89,7 @@ export default class ActionMenu extends React.PureComponent {
     }
 
     render() {
-        const {action} = this.props;
+        const {action, disabled} = this.props;
 
         return (
             <PostContext.Consumer>
@@ -99,6 +101,7 @@ export default class ActionMenu extends React.PureComponent {
                         inputClassName='post-attachment-dropdown'
                         value={this.state.value}
                         toggleFocus={handlePopupOpened}
+                        disabled={disabled}
                     />
                 )}
             </PostContext.Consumer>

@@ -6,7 +6,7 @@ import {shallow} from 'enzyme';
 
 import {Constants} from 'utils/constants';
 
-import SystemUsersList from 'components/admin_console/system_users/list/system_users_list';
+import SystemUsersList from 'components/admin_console/system_users/list/system_users_list.jsx';
 
 describe('components/admin_console/system_users/list', () => {
     const defaultProps = {

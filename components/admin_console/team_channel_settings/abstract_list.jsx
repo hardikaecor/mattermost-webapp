@@ -8,7 +8,7 @@ import {FormattedMessage} from 'react-intl';
 import NextIcon from 'components/widgets/icons/fa_next_icon';
 import PreviousIcon from 'components/widgets/icons/fa_previous_icon';
 
-const PAGE_SIZE = 10;
+export const PAGE_SIZE = 10;
 
 export default class AbstractList extends React.PureComponent {
     static propTypes = {
@@ -55,6 +55,13 @@ export default class AbstractList extends React.PureComponent {
         this.performSearch(page);
     }
 
+    renderHeader = () => {
+        if (this.props.data.length > 0) {
+            return this.props.header;
+        }
+        return null;
+    }
+
     renderRows = () => {
         if (this.state.loading) {
             return (
@@ -84,9 +91,9 @@ export default class AbstractList extends React.PureComponent {
         newState.loading = true;
         this.setState(newState);
 
-        this.props.actions.getData(page, PAGE_SIZE).then(() => {
+        this.props.actions.getData(page, PAGE_SIZE).then((response) => {
             if (this.props.onPageChangedCallback) {
-                this.props.onPageChangedCallback(this.getPaging());
+                this.props.onPageChangedCallback(this.getPaging(), response);
             }
             this.setState({loading: false});
         });
@@ -108,8 +115,11 @@ export default class AbstractList extends React.PureComponent {
         const firstPage = this.state.page === 0;
         return (
             <div className='groups-list groups-list-no-padding'>
-                {total > 0 && this.props.header}
-                <div className='groups-list--body'>
+                {this.renderHeader()}
+                <div
+                    id='groups-list--body'
+                    className='groups-list--body'
+                >
                     {this.renderRows()}
                 </div>
                 {total > 0 && <div className='groups-list--footer'>
@@ -135,6 +145,7 @@ export default class AbstractList extends React.PureComponent {
                         className={'btn btn-link next ' + (lastPage ? 'disabled' : '')}
                         onClick={lastPage ? null : this.nextPage}
                         disabled={lastPage}
+                        data-testid='page-link-next'
                     >
                         <NextIcon/>
                     </button>
@@ -143,4 +154,3 @@ export default class AbstractList extends React.PureComponent {
         );
     }
 }
-

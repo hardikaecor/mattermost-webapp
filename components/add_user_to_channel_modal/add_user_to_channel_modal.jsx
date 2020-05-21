@@ -240,7 +240,6 @@ export default class AddUserToChannelModal extends React.Component {
                 className='form-control focused'
                 onChange={this.onInputChange}
                 value={this.state.text}
-                onKeyDown={this.handleKeyDown}
                 onItemSelected={this.didSelectChannel}
                 listComponent={SuggestionList}
                 maxLength='64'
@@ -249,7 +248,7 @@ export default class AddUserToChannelModal extends React.Component {
                 completeOnTab={false}
                 renderDividers={false}
                 delayInputUpdate={true}
-                openWhenEmpty={true}
+                openWhenEmpty={false}
             />
         );
 
@@ -276,7 +275,7 @@ export default class AddUserToChannelModal extends React.Component {
                     >
                         <FormattedMessage
                             id='add_user_to_channel_modal.title'
-                            defaultMessage='Add {name} to a channel'
+                            defaultMessage='Add {name} to a Channel'
                             values={{
                                 name,
                             }}
@@ -291,7 +290,9 @@ export default class AddUserToChannelModal extends React.Component {
                         <div className='modal__hint'>
                             {help}
                         </div>
-                        {content}
+                        <div className='pos-relative'>
+                            {content}
+                        </div>
                         <div>
                             {errorMsg}
                             <br/>
