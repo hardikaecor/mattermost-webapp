@@ -12,7 +12,8 @@ import {
     getCurrentChannelId,
     getMyChannels,
     getMyChannelMember,
-    getChannelMembersInChannels
+    getChannelMembersInChannels,
+    getDirectChannels,
 } from 'mattermost-redux/selectors/entities/channels';
 import {getBool} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeamId, getTeamMember} from 'mattermost-redux/selectors/entities/teams';
@@ -21,6 +22,7 @@ import {makeFilterAutoclosedDMs, makeFilterManuallyClosedDMs} from 'mattermost-r
 import {CategoryTypes} from 'mattermost-redux/constants/channel_categories';
 
 import {loadStatusesForProfilesList, loadStatusesForProfilesMap} from 'actions/status_actions.jsx';
+import {trackEvent} from 'actions/diagnostics_actions.jsx';
 import store from 'stores/redux_store.jsx';
 import * as Utils from 'utils/utils.jsx';
 import {Constants, Preferences, UserStatuses} from 'utils/constants';
@@ -49,7 +51,7 @@ export function loadProfilesAndReloadTeamMembers(page, perPage, teamId, options 
         if (data) {
             await Promise.all([
                 doDispatch(loadTeamMembersForProfilesList(data, newTeamId, true)),
-                doDispatch(loadStatusesForProfilesList(data))
+                doDispatch(loadStatusesForProfilesList(data)),
             ]);
         }
 
@@ -64,7 +66,7 @@ export function loadProfilesAndReloadChannelMembers(page, perPage, channelId, so
         if (data) {
             await Promise.all([
                 doDispatch(loadChannelMembersForProfilesList(data, newChannelId, true)),
-                doDispatch(loadStatusesForProfilesList(data))
+                doDispatch(loadStatusesForProfilesList(data)),
             ]);
         }
 
@@ -92,7 +94,7 @@ export function searchProfilesAndTeamMembers(term = '', options = {}) {
         if (data) {
             await Promise.all([
                 doDispatch(loadTeamMembersForProfilesList(data, newTeamId)),
-                doDispatch(loadStatusesForProfilesList(data))
+                doDispatch(loadStatusesForProfilesList(data)),
             ]);
         }
 
@@ -102,12 +104,12 @@ export function searchProfilesAndTeamMembers(term = '', options = {}) {
 
 export function searchProfilesAndChannelMembers(term, options = {}) {
     return async (doDispatch, doGetState) => {
-        const newChannelId = options.channel_id || getCurrentChannelId(doGetState());
+        const newChannelId = options.in_channel_id || getCurrentChannelId(doGetState());
         const {data} = await doDispatch(UserActions.searchProfiles(term, options));
         if (data) {
             await Promise.all([
                 doDispatch(loadChannelMembersForProfilesList(data, newChannelId)),
-                doDispatch(loadStatusesForProfilesList(data))
+                doDispatch(loadStatusesForProfilesList(data)),
             ]);
         }
 
@@ -284,9 +286,8 @@ export function loadProfilesForGroupChannels(groupChannels) {
     };
 }
 
-export function loadProfilesForSidebar() {
-    loadProfilesForDM();
-    loadProfilesForGM();
+export async function loadProfilesForSidebar() {
+    await Promise.all([loadProfilesForDM(), loadProfilesForGM()]);
 }
 
 export function filterGMsDMs(state, channels) {
@@ -418,5 +419,15 @@ export function autoResetStatus() {
         }
 
         return userStatus;
+    };
+}
+
+export function trackDMGMOpenChannels() {
+    return (doDispatch, doGetState) => {
+        const state = doGetState();
+        const channels = getDirectChannels(state);
+        trackEvent('ui', 'LHS_DM_GM_Count', {count: channels.length});
+
+        return {data: true};
     };
 }

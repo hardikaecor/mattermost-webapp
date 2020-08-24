@@ -24,11 +24,12 @@ import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 import PermissionsTree, {EXCLUDED_PERMISSIONS} from '../permissions_tree';
 import GuestPermissionsTree, {GUEST_INCLUDED_PERMISSIONS} from '../guest_permissions_tree';
 
-export default class PermissionSystemSchemeSettings extends React.Component {
+export default class PermissionSystemSchemeSettings extends React.PureComponent {
     static propTypes = {
         config: PropTypes.object.isRequired,
         roles: PropTypes.object.isRequired,
         license: PropTypes.object.isRequired,
+        isDisabled: PropTypes.bool,
         actions: PropTypes.shape({
             loadRolesIfNeeded: PropTypes.func.isRequired,
             editRole: PropTypes.func.isRequired,
@@ -52,6 +53,7 @@ export default class PermissionSystemSchemeSettings extends React.Component {
                 team_admin: true,
                 channel_admin: true,
             },
+            urlParams: new URLSearchParams(props.location.search),
         };
         this.rolesNeeded = [
             GeneralConstants.SYSTEM_ADMIN_ROLE,
@@ -70,6 +72,12 @@ export default class PermissionSystemSchemeSettings extends React.Component {
         this.props.actions.loadRolesIfNeeded(this.rolesNeeded);
         if (this.rolesNeeded.every((roleName) => this.props.roles[roleName])) {
             this.loadRolesIntoState(this.props);
+        }
+
+        if (this.state.urlParams.get('rowIdFromQuery')) {
+            setTimeout(() => {
+                this.selectRow(this.state.urlParams.get('rowIdFromQuery'));
+            }, 1000);
         }
     }
 
@@ -327,7 +335,7 @@ export default class PermissionSystemSchemeSettings extends React.Component {
                                     scope={'system_scope'}
                                     onToggle={this.togglePermission}
                                     selectRow={this.selectRow}
-                                    readOnly={!this.haveGuestAccountsPermissions()}
+                                    readOnly={this.props.isDisabled || !this.haveGuestAccountsPermissions()}
                                 />
                             </AdminPanelTogglable>}
 
@@ -347,6 +355,7 @@ export default class PermissionSystemSchemeSettings extends React.Component {
                                 scope={'system_scope'}
                                 onToggle={this.togglePermission}
                                 selectRow={this.selectRow}
+                                readOnly={this.props.isDisabled}
                             />
                         </AdminPanelTogglable>
 
@@ -365,6 +374,7 @@ export default class PermissionSystemSchemeSettings extends React.Component {
                                 scope={'channel_scope'}
                                 onToggle={this.togglePermission}
                                 selectRow={this.selectRow}
+                                readOnly={this.props.isDisabled}
                             />
                         </AdminPanelTogglable>
 
@@ -383,6 +393,7 @@ export default class PermissionSystemSchemeSettings extends React.Component {
                                 scope={'team_scope'}
                                 onToggle={this.togglePermission}
                                 selectRow={this.selectRow}
+                                readOnly={this.props.isDisabled}
                             />
                         </AdminPanelTogglable>
 
@@ -409,7 +420,7 @@ export default class PermissionSystemSchemeSettings extends React.Component {
                 <div className='admin-console-save'>
                     <SaveButton
                         saving={this.state.saving}
-                        disabled={!this.state.saveNeeded || (this.canSave && !this.canSave())}
+                        disabled={this.props.isDisabled || !this.state.saveNeeded || (this.canSave && !this.canSave())}
                         onClick={this.handleSubmit}
                         savingMessage={localizeMessage('admin.saving', 'Saving Config...')}
                     />
