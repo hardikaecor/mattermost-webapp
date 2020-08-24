@@ -55,6 +55,7 @@ exports[`admin_console/team_channel_settings/channel/ChannelModeration Should ma
             membersDisabled={false}
             name="create_post"
             onClick={[Function]}
+            readOnly={false}
           />
           <ChannelModerationTableRow
             errorMessages={
@@ -67,7 +68,7 @@ exports[`admin_console/team_channel_settings/channel/ChannelModeration Should ma
                     id="admin.channel_settings.channel_moderation.channelMentions.disabledBoth"
                     values={
                       Object {
-                        "scheme_link": "team_override_scheme/id",
+                        "scheme_link": "team_override_scheme/id?rowIdFromQuery=use_channel_mentions",
                         "scheme_name": "dp Team Scheme",
                       }
                     }
@@ -83,6 +84,7 @@ exports[`admin_console/team_channel_settings/channel/ChannelModeration Should ma
             membersDisabled={true}
             name="use_channel_mentions"
             onClick={[Function]}
+            readOnly={false}
           />
         </tbody>
       </table>
@@ -146,6 +148,7 @@ exports[`admin_console/team_channel_settings/channel/ChannelModeration Should ma
             membersDisabled={false}
             name="create_post"
             onClick={[Function]}
+            readOnly={false}
           />
         </tbody>
       </table>
@@ -209,6 +212,7 @@ exports[`admin_console/team_channel_settings/channel/ChannelModeration Should ma
             membersDisabled={false}
             name="create_post"
             onClick={[Function]}
+            readOnly={false}
           />
           <ChannelModerationTableRow
             errorMessages={
@@ -232,6 +236,7 @@ exports[`admin_console/team_channel_settings/channel/ChannelModeration Should ma
             membersDisabled={true}
             name="use_channel_mentions"
             onClick={[Function]}
+            readOnly={false}
           />
         </tbody>
       </table>
@@ -267,7 +272,6 @@ exports[`admin_console/team_channel_settings/channel/ChannelModeration Should ma
     <button
       className="checkbox checked"
       data-testid="create_post-guests"
-      disabled={false}
       onClick={[Function]}
     >
       <CheckboxCheckedIcon />
@@ -277,7 +281,6 @@ exports[`admin_console/team_channel_settings/channel/ChannelModeration Should ma
     <button
       className="checkbox checked"
       data-testid="create_post-members"
-      disabled={false}
       onClick={[Function]}
     >
       <CheckboxCheckedIcon />
@@ -313,7 +316,6 @@ exports[`admin_console/team_channel_settings/channel/ChannelModeration Should ma
     <button
       className="checkbox checked"
       data-testid="create_post-members"
-      disabled={false}
       onClick={[Function]}
     >
       <CheckboxCheckedIcon />
@@ -377,6 +379,7 @@ exports[`admin_console/team_channel_settings/channel/ChannelModeration Should ma
             membersDisabled={false}
             name="create_post"
             onClick={[Function]}
+            readOnly={false}
           />
           <ChannelModerationTableRow
             errorMessages={
@@ -398,7 +401,7 @@ exports[`admin_console/team_channel_settings/channel/ChannelModeration Should ma
                     id="admin.channel_settings.channel_moderation.channelMentions.disabledMember"
                     values={
                       Object {
-                        "scheme_link": "team_override_scheme/id",
+                        "scheme_link": "team_override_scheme/id?rowIdFromQuery=use_channel_mentions",
                         "scheme_name": "dp Team Scheme",
                       }
                     }
@@ -414,6 +417,7 @@ exports[`admin_console/team_channel_settings/channel/ChannelModeration Should ma
             membersDisabled={true}
             name="use_channel_mentions"
             onClick={[Function]}
+            readOnly={false}
           />
         </tbody>
       </table>
@@ -470,6 +474,7 @@ exports[`admin_console/team_channel_settings/channel/ChannelModeration Should ma
             membersDisabled={false}
             name="create_post"
             onClick={[Function]}
+            readOnly={false}
           />
         </tbody>
       </table>
@@ -533,6 +538,7 @@ exports[`admin_console/team_channel_settings/channel/ChannelModeration Should ma
             membersDisabled={false}
             name="create_post"
             onClick={[Function]}
+            readOnly={false}
           />
           <ChannelModerationTableRow
             errorMessages={
@@ -554,7 +560,7 @@ exports[`admin_console/team_channel_settings/channel/ChannelModeration Should ma
                     id="admin.channel_settings.channel_moderation.channelMentions.disabledGuest"
                     values={
                       Object {
-                        "scheme_link": "team_override_scheme/id",
+                        "scheme_link": "team_override_scheme/id?rowIdFromQuery=guest_use_channel_mentions",
                         "scheme_name": "dp Team Scheme",
                       }
                     }
@@ -570,6 +576,7 @@ exports[`admin_console/team_channel_settings/channel/ChannelModeration Should ma
             membersDisabled={true}
             name="use_channel_mentions"
             onClick={[Function]}
+            readOnly={false}
           />
         </tbody>
       </table>

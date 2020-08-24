@@ -12,7 +12,7 @@ import PermissionGroup from '../permission_group.jsx';
 import EditPostTimeLimitButton from '../edit_post_time_limit_button';
 import EditPostTimeLimitModal from '../edit_post_time_limit_modal';
 
-export default class PermissionsTree extends React.Component {
+export default class PermissionsTree extends React.PureComponent {
     static propTypes = {
         scope: PropTypes.string.isRequired,
         config: PropTypes.object.isRequired,
@@ -40,7 +40,12 @@ export default class PermissionsTree extends React.Component {
 
         this.ADDITIONAL_VALUES = {
             edit_post: {
-                editTimeLimitButton: <EditPostTimeLimitButton onClick={this.openPostTimeLimitModal}/>,
+                editTimeLimitButton: (
+                    <EditPostTimeLimitButton
+                        onClick={this.openPostTimeLimitModal}
+                        isDisabled={this.props.readOnly}
+                    />
+                ),
             },
         };
 
@@ -65,7 +70,14 @@ export default class PermissionsTree extends React.Component {
                 permissions: [
                     Permissions.CREATE_PUBLIC_CHANNEL,
                     Permissions.MANAGE_PUBLIC_CHANNEL_PROPERTIES,
-                    Permissions.MANAGE_PUBLIC_CHANNEL_MEMBERS,
+                    {
+                        id: 'manage_public_channel_members_and_read_groups',
+                        combined: true,
+                        permissions: [
+                            Permissions.MANAGE_PUBLIC_CHANNEL_MEMBERS,
+                            Permissions.READ_PUBLIC_CHANNEL_GROUPS,
+                        ],
+                    },
                     Permissions.DELETE_PUBLIC_CHANNEL,
                 ],
             },
@@ -74,7 +86,14 @@ export default class PermissionsTree extends React.Component {
                 permissions: [
                     Permissions.CREATE_PRIVATE_CHANNEL,
                     Permissions.MANAGE_PRIVATE_CHANNEL_PROPERTIES,
-                    Permissions.MANAGE_PRIVATE_CHANNEL_MEMBERS,
+                    {
+                        id: 'manage_private_channel_members_and_read_groups',
+                        combined: true,
+                        permissions: [
+                            Permissions.MANAGE_PRIVATE_CHANNEL_MEMBERS,
+                            Permissions.READ_PRIVATE_CHANNEL_GROUPS,
+                        ],
+                    },
                     Permissions.DELETE_PRIVATE_CHANNEL,
                 ],
             },

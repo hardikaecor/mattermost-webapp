@@ -13,9 +13,10 @@ import {t} from 'utils/i18n';
 
 import LineSwitch from 'components/admin_console/team_channel_settings/line_switch.jsx';
 
-const GroupSettingsToggle = ({isDefault, allowReference, onToggle}) => (
+const GroupSettingsToggle = ({isDefault, allowReference, onToggle, isDisabled}) => (
     <LineSwitch
-        disabled={isDefault}
+        id={'allowReferenceSwitch'}
+        disabled={isDisabled || isDefault}
         toggled={allowReference}
         last={true}
         onToggle={() => {
@@ -43,9 +44,10 @@ GroupSettingsToggle.propTypes = {
     isDefault: PropTypes.bool.isRequired,
     allowReference: PropTypes.bool.isRequired,
     onToggle: PropTypes.func.isRequired,
+    isDisabled: PropTypes.bool,
 };
 
-export const GroupProfileAndSettings = ({displayname, mentionname, allowReference, onToggle, onChange}) => (
+export const GroupProfileAndSettings = ({displayname, mentionname, allowReference, onToggle, onChange, readOnly}) => (
     <AdminPanel
         id='group_profile'
         titleId={t('admin.group_settings.group_detail.groupProfileTitle')}
@@ -57,7 +59,7 @@ export const GroupProfileAndSettings = ({displayname, mentionname, allowReferenc
             name={displayname}
             title={t('admin.group_settings.group_details.group_profile.name')}
             titleDefault={'Name:'}
-            customID={'GroupDisplayName'}
+            customID={'groupDisplayName'}
             isDisabled={true}
             showAtMention={false}
         />
@@ -68,6 +70,7 @@ export const GroupProfileAndSettings = ({displayname, mentionname, allowReferenc
                     isDefault={false}
                     allowReference={allowReference}
                     onToggle={onToggle}
+                    isDisabled={readOnly}
                 />
             </div>
         </div>
@@ -76,8 +79,8 @@ export const GroupProfileAndSettings = ({displayname, mentionname, allowReferenc
                 name={mentionname}
                 title={t('admin.group_settings.group_details.group_mention.name')}
                 titleDefault={'Group Mention:'}
-                customID={'GroupMention'}
-                isDisabled={false}
+                customID={'groupMention'}
+                isDisabled={readOnly}
                 showAtMention={true}
                 onChange={onChange}
             />
@@ -86,8 +89,9 @@ export const GroupProfileAndSettings = ({displayname, mentionname, allowReferenc
 
 GroupProfileAndSettings.propTypes = {
     displayname: PropTypes.string.isRequired,
-    mentionname: PropTypes.string.isRequired,
+    mentionname: PropTypes.string,
     allowReference: PropTypes.bool.isRequired,
     onChange: PropTypes.func.isRequired,
     onToggle: PropTypes.func.isRequired,
+    readOnly: PropTypes.bool,
 };

@@ -10,15 +10,10 @@
 // Stage: @prod
 // Group: @mark_as_unread
 
-import * as TIMEOUTS from '../../fixtures/timeouts';
-import users from '../../fixtures/users.json';
-
-const user1 = users['user-1'];
-const sysadmin = users.sysadmin;
+import {verifyPostNextToNewMessageSeparator, switchToChannel, beRead, beUnread, showCursor, markAsUnreadFromMenu} from './helpers';
 
 describe('Mark as Unread', () => {
-    let sysadminId;
-    let team;
+    let testUser;
 
     let channelA;
     let channelB;
@@ -27,50 +22,56 @@ describe('Mark as Unread', () => {
     let post2;
     let post3;
 
-    before(() => {
-        cy.apiLogin('user-1');
-
-        // # Create a team and add sysadmin into it
-        cy.apiCreateTeam('test-team', 'Test Team').then((teamRes) => {
-            team = teamRes.body;
-            cy.apiGetUserByEmail(sysadmin.email).then((emailResponse) => {
-                sysadminId = emailResponse.body.id;
-                cy.apiAddUserToTeam(team.id, sysadminId);
-            });
-        });
-    });
-
     beforeEach(() => {
-        cy.apiCreateChannel(team.id, 'channel-a', 'Channel A').then((resp) => {
-            channelA = resp.body;
+        cy.apiAdminLogin();
+        cy.apiInitSetup().then(({team, channel, user}) => {
+            testUser = user;
+            channelA = channel;
 
-            // # Add sysadmin to channel A
-            cy.apiAddUserToChannel(channelA.id, sysadminId);
+            cy.apiCreateChannel(team.id, 'channel-b', 'Channel B').then(
+                (resp) => {
+                    channelB = resp.body;
+                    cy.apiAddUserToChannel(channelB.id, testUser.id);
+                },
+            );
 
-            // Another user creates posts in the channel since you can't mark your own posts unread currently
-            cy.postMessageAs({sender: sysadmin, message: 'post1', channelId: channelA.id}).then((p1) => {
-                post1 = p1;
+            cy.apiCreateUser().then(({user: user2}) => {
+                const otherUser = user2;
 
-                cy.postMessageAs({sender: sysadmin, message: 'post2', channelId: channelA.id}).then((p2) => {
-                    post2 = p2;
+                cy.apiAddUserToTeam(team.id, otherUser.id).then(() => {
+                    cy.apiAddUserToChannel(channelA.id, otherUser.id);
 
-                    cy.postMessageAs({sender: sysadmin, message: 'post3', channelId: channelA.id, rootId: post1.id}).then((post) => {
-                        post3 = post;
+                    // Another user creates posts in the channel since you can't mark your own posts unread currently
+                    cy.postMessageAs({
+                        sender: otherUser,
+                        message: 'post1',
+                        channelId: channelA.id,
+                    }).then((p1) => {
+                        post1 = p1;
+
+                        cy.postMessageAs({
+                            sender: otherUser,
+                            message: 'post2',
+                            channelId: channelA.id,
+                        }).then((p2) => {
+                            post2 = p2;
+
+                            cy.postMessageAs({
+                                sender: otherUser,
+                                message: 'post3',
+                                channelId: channelA.id,
+                                rootId: post1.id,
+                            }).then((post) => {
+                                post3 = post;
+                            });
+                        });
                     });
                 });
             });
+
+            cy.apiLogin(testUser);
+            cy.visit(`/${team.name}/channels/town-square`);
         });
-
-        cy.apiCreateChannel(team.id, 'channel-b', 'Channel B').then((resp) => {
-            channelB = resp.body;
-        });
-
-        cy.visit(`/${team.name}/channels/town-square`);
-    });
-
-    afterEach(() => {
-        cy.apiDeleteChannel(channelA.id);
-        cy.apiDeleteChannel(channelB.id);
     });
 
     it('Channel should appear unread after switching away from channel and be read after switching back', () => {
@@ -195,11 +196,6 @@ describe('Mark as Unread', () => {
     });
 
     it('Should show cursor pointer when holding down alt', () => {
-        const showCursor = (items) => {
-            cy.expect(items).to.have.length(1);
-            expect(items[0].className).to.match(/cursor--pointer/);
-        };
-
         const notShowCursor = (items) => {
             cy.expect(items).to.have.length(1);
             expect(items[0].className).to.not.match(/cursor--pointer/);
@@ -245,7 +241,7 @@ describe('Mark as Unread', () => {
 
         cy.get(`#sidebarItem_${channelA.name}`).should(beRead);
 
-        markAsUnreadFromAnotherSession(post2);
+        markAsUnreadFromAnotherSession(post2, testUser);
 
         // The channel should now be unread
         cy.get(`#sidebarItem_${channelA.name}`).should(beUnread);
@@ -273,7 +269,7 @@ describe('Mark as Unread', () => {
 
         cy.get(`#sidebarItem_${channelA.name}`).should(beRead);
 
-        markAsUnreadFromAnotherSession(post2);
+        markAsUnreadFromAnotherSession(post2, testUser);
 
         // The channel should now be unread
         cy.get(`#sidebarItem_${channelA.name}`).should(beUnread);
@@ -288,51 +284,18 @@ describe('Mark as Unread', () => {
     });
 });
 
-function switchToChannel(channel) {
-    cy.get(`#sidebarItem_${channel.name}`).click();
-
-    cy.get('#channelHeaderTitle').should('contain', channel.display_name);
-
-    // # Wait some time for the channel to set state
-    cy.wait(TIMEOUTS.TINY);
-}
-
-function beRead(items) {
-    expect(items).to.have.length(1);
-    expect(items[0].className).to.not.match(/unread-title/);
-}
-
-function beUnread(items) {
-    expect(items).to.have.length(1);
-    expect(items[0].className).to.match(/unread-title/);
-}
-
-function markAsUnreadFromMenu(post, prefix = 'post', location = 'CENTER') {
-    cy.get(`#${prefix}_${post.id}`).trigger('mouseover');
-    cy.clickPostDotMenu(post.id, location);
-    cy.get('.dropdown-menu').should('be.visible').within(() => {
-        cy.findByText('Mark as Unread').should('be.visible').click();
-    });
-}
-
 function markAsUnreadFromPost(post, rhs = false) {
     const prefix = rhs ? 'rhsPost' : 'post';
 
     cy.get('body').type('{alt}', {release: false});
-    cy.get(`#${prefix}_${post.id}`).click();
+    cy.get(`#${prefix}_${post.id}`).click({force: true});
     cy.get('body').type('{alt}', {release: true});
 }
 
-function markAsUnreadFromAnotherSession(post) {
-    cy.getCurrentUserId().then((userId) => {
-        cy.externalRequest({
-            user: user1,
-            method: 'post',
-            path: `users/${userId}/posts/${post.id}/set_unread`,
-        });
+function markAsUnreadFromAnotherSession(post, user) {
+    cy.externalRequest({
+        user,
+        method: 'post',
+        path: `users/${user.id}/posts/${post.id}/set_unread`,
     });
-}
-
-function verifyPostNextToNewMessageSeparator(message) {
-    cy.get('.NotificationSeparator').should('exist').parent().parent().parent().next().should('contain', message);
 }

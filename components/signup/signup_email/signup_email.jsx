@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+/* eslint-disable react/no-string-refs */
 
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -24,7 +25,7 @@ import FormattedMarkdownMessage from 'components/formatted_markdown_message.jsx'
 
 import {externalYESRegisterURL} from 'utils/constants';
 
-export default class SignupEmail extends React.Component {
+export default class SignupEmail extends React.PureComponent {
     static propTypes = {
         location: PropTypes.object,
         enableSignUpWithEmail: PropTypes.bool.isRequired,
@@ -122,6 +123,7 @@ export default class SignupEmail extends React.Component {
 
     handleSignupSuccess = (user, data) => {
         trackEvent('signup', 'signup_user_02_complete');
+        const redirectTo = (new URLSearchParams(this.props.location.search)).get('redirect_to');
 
         this.props.actions.loginById(data.id, user.password, '').then(({error}) => {
             if (error) {
@@ -129,6 +131,9 @@ export default class SignupEmail extends React.Component {
                     let verifyUrl = '/should_verify_email?email=' + encodeURIComponent(user.email);
                     if (this.state.teamName) {
                         verifyUrl += '&teamname=' + encodeURIComponent(this.state.teamName);
+                    }
+                    if (redirectTo) {
+                        verifyUrl += '&redirect_to=' + redirectTo;
                     }
                     browserHistory.push(verifyUrl);
                 } else {
@@ -145,7 +150,6 @@ export default class SignupEmail extends React.Component {
                 this.props.actions.setGlobalItem(this.state.token, JSON.stringify({usedBefore: true}));
             }
 
-            const redirectTo = (new URLSearchParams(this.props.location.search)).get('redirect_to');
             if (redirectTo) {
                 browserHistory.push(redirectTo);
             } else {
@@ -254,7 +258,9 @@ export default class SignupEmail extends React.Component {
                 allow_marketing: true,
             };
 
-            this.props.actions.createUser(user, this.state.token, this.state.inviteId).then((result) => {
+            const redirectTo = (new URLSearchParams(this.props.location.search)).get('redirect_to');
+
+            this.props.actions.createUser(user, this.state.token, this.state.inviteId, redirectTo).then((result) => {
                 if (result.error) {
                     this.setState({
                         serverError: result.error.message,
@@ -538,3 +544,4 @@ export default class SignupEmail extends React.Component {
         );
     }
 }
+/* eslint-enable react/no-string-refs */

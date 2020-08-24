@@ -32,8 +32,9 @@ exports[`components/admin_console/permission_schemes_settings/permission_tree sh
     <PermissionGroup
       additionalValues={
         Object {
-          "edit_post": Object {
-            "editTimeLimitButton": <Connect(EditPostTimeLimitButton)
+          "guest_edit_post": Object {
+            "editTimeLimitButton": <Memo(Connect(EditPostTimeLimitButton))
+              isDisabled={false}
               onClick={[Function]}
             />,
           },
@@ -46,20 +47,56 @@ exports[`components/admin_console/permission_schemes_settings/permission_tree sh
       parentRole={null}
       permissions={
         Array [
-          "create_private_channel",
-          "edit_post",
-          "delete_post",
           Object {
             "combined": true,
-            "id": "reactions",
+            "id": "guest_create_private_channel",
+            "permissions": Array [
+              "create_private_channel",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_edit_post",
+            "permissions": Array [
+              "edit_post",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_delete_post",
+            "permissions": Array [
+              "delete_post",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_reactions",
             "permissions": Array [
               "add_reaction",
               "remove_reaction",
             ],
           },
-          "use_channel_mentions",
-          "use_group_mentions",
-          "create_post",
+          Object {
+            "combined": true,
+            "id": "guest_use_channel_mentions",
+            "permissions": Array [
+              "use_channel_mentions",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_use_group_mentions",
+            "permissions": Array [
+              "use_group_mentions",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_create_post",
+            "permissions": Array [
+              "create_post",
+            ],
+          },
         ]
       }
       readOnly={false}
@@ -114,8 +151,9 @@ exports[`components/admin_console/permission_schemes_settings/permission_tree sh
     <PermissionGroup
       additionalValues={
         Object {
-          "edit_post": Object {
-            "editTimeLimitButton": <Connect(EditPostTimeLimitButton)
+          "guest_edit_post": Object {
+            "editTimeLimitButton": <Memo(Connect(EditPostTimeLimitButton))
+              isDisabled={false}
               onClick={[Function]}
             />,
           },
@@ -128,20 +166,56 @@ exports[`components/admin_console/permission_schemes_settings/permission_tree sh
       parentRole={null}
       permissions={
         Array [
-          "create_private_channel",
-          "edit_post",
-          "delete_post",
           Object {
             "combined": true,
-            "id": "reactions",
+            "id": "guest_create_private_channel",
+            "permissions": Array [
+              "create_private_channel",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_edit_post",
+            "permissions": Array [
+              "edit_post",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_delete_post",
+            "permissions": Array [
+              "delete_post",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_reactions",
             "permissions": Array [
               "add_reaction",
               "remove_reaction",
             ],
           },
-          "use_channel_mentions",
-          "use_group_mentions",
-          "create_post",
+          Object {
+            "combined": true,
+            "id": "guest_use_channel_mentions",
+            "permissions": Array [
+              "use_channel_mentions",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_use_group_mentions",
+            "permissions": Array [
+              "use_group_mentions",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_create_post",
+            "permissions": Array [
+              "create_post",
+            ],
+          },
         ]
       }
       readOnly={false}
@@ -196,8 +270,9 @@ exports[`components/admin_console/permission_schemes_settings/permission_tree sh
     <PermissionGroup
       additionalValues={
         Object {
-          "edit_post": Object {
-            "editTimeLimitButton": <Connect(EditPostTimeLimitButton)
+          "guest_edit_post": Object {
+            "editTimeLimitButton": <Memo(Connect(EditPostTimeLimitButton))
+              isDisabled={false}
               onClick={[Function]}
             />,
           },
@@ -210,19 +285,49 @@ exports[`components/admin_console/permission_schemes_settings/permission_tree sh
       parentRole={null}
       permissions={
         Array [
-          "create_private_channel",
-          "edit_post",
-          "delete_post",
           Object {
             "combined": true,
-            "id": "reactions",
+            "id": "guest_create_private_channel",
+            "permissions": Array [
+              "create_private_channel",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_edit_post",
+            "permissions": Array [
+              "edit_post",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_delete_post",
+            "permissions": Array [
+              "delete_post",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_reactions",
             "permissions": Array [
               "add_reaction",
               "remove_reaction",
             ],
           },
-          "use_channel_mentions",
-          "create_post",
+          Object {
+            "combined": true,
+            "id": "guest_use_channel_mentions",
+            "permissions": Array [
+              "use_channel_mentions",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_create_post",
+            "permissions": Array [
+              "create_post",
+            ],
+          },
         ]
       }
       readOnly={false}
@@ -277,8 +382,9 @@ exports[`components/admin_console/permission_schemes_settings/permission_tree sh
     <PermissionGroup
       additionalValues={
         Object {
-          "edit_post": Object {
-            "editTimeLimitButton": <Connect(EditPostTimeLimitButton)
+          "guest_edit_post": Object {
+            "editTimeLimitButton": <Memo(Connect(EditPostTimeLimitButton))
+              isDisabled={true}
               onClick={[Function]}
             />,
           },
@@ -291,20 +397,56 @@ exports[`components/admin_console/permission_schemes_settings/permission_tree sh
       parentRole={null}
       permissions={
         Array [
-          "create_private_channel",
-          "edit_post",
-          "delete_post",
           Object {
             "combined": true,
-            "id": "reactions",
+            "id": "guest_create_private_channel",
+            "permissions": Array [
+              "create_private_channel",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_edit_post",
+            "permissions": Array [
+              "edit_post",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_delete_post",
+            "permissions": Array [
+              "delete_post",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_reactions",
             "permissions": Array [
               "add_reaction",
               "remove_reaction",
             ],
           },
-          "use_channel_mentions",
-          "use_group_mentions",
-          "create_post",
+          Object {
+            "combined": true,
+            "id": "guest_use_channel_mentions",
+            "permissions": Array [
+              "use_channel_mentions",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_use_group_mentions",
+            "permissions": Array [
+              "use_group_mentions",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_create_post",
+            "permissions": Array [
+              "create_post",
+            ],
+          },
         ]
       }
       readOnly={true}
@@ -359,8 +501,9 @@ exports[`components/admin_console/permission_schemes_settings/permission_tree sh
     <PermissionGroup
       additionalValues={
         Object {
-          "edit_post": Object {
-            "editTimeLimitButton": <Connect(EditPostTimeLimitButton)
+          "guest_edit_post": Object {
+            "editTimeLimitButton": <Memo(Connect(EditPostTimeLimitButton))
+              isDisabled={false}
               onClick={[Function]}
             />,
           },
@@ -373,20 +516,56 @@ exports[`components/admin_console/permission_schemes_settings/permission_tree sh
       parentRole={null}
       permissions={
         Array [
-          "create_private_channel",
-          "edit_post",
-          "delete_post",
           Object {
             "combined": true,
-            "id": "reactions",
+            "id": "guest_create_private_channel",
+            "permissions": Array [
+              "create_private_channel",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_edit_post",
+            "permissions": Array [
+              "edit_post",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_delete_post",
+            "permissions": Array [
+              "delete_post",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_reactions",
             "permissions": Array [
               "add_reaction",
               "remove_reaction",
             ],
           },
-          "use_channel_mentions",
-          "use_group_mentions",
-          "create_post",
+          Object {
+            "combined": true,
+            "id": "guest_use_channel_mentions",
+            "permissions": Array [
+              "use_channel_mentions",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_use_group_mentions",
+            "permissions": Array [
+              "use_group_mentions",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_create_post",
+            "permissions": Array [
+              "create_post",
+            ],
+          },
         ]
       }
       readOnly={false}
@@ -441,8 +620,9 @@ exports[`components/admin_console/permission_schemes_settings/permission_tree sh
     <PermissionGroup
       additionalValues={
         Object {
-          "edit_post": Object {
-            "editTimeLimitButton": <Connect(EditPostTimeLimitButton)
+          "guest_edit_post": Object {
+            "editTimeLimitButton": <Memo(Connect(EditPostTimeLimitButton))
+              isDisabled={false}
               onClick={[Function]}
             />,
           },
@@ -455,20 +635,56 @@ exports[`components/admin_console/permission_schemes_settings/permission_tree sh
       parentRole={null}
       permissions={
         Array [
-          "create_private_channel",
-          "edit_post",
-          "delete_post",
           Object {
             "combined": true,
-            "id": "reactions",
+            "id": "guest_create_private_channel",
+            "permissions": Array [
+              "create_private_channel",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_edit_post",
+            "permissions": Array [
+              "edit_post",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_delete_post",
+            "permissions": Array [
+              "delete_post",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_reactions",
             "permissions": Array [
               "add_reaction",
               "remove_reaction",
             ],
           },
-          "use_channel_mentions",
-          "use_group_mentions",
-          "create_post",
+          Object {
+            "combined": true,
+            "id": "guest_use_channel_mentions",
+            "permissions": Array [
+              "use_channel_mentions",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_use_group_mentions",
+            "permissions": Array [
+              "use_group_mentions",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_create_post",
+            "permissions": Array [
+              "create_post",
+            ],
+          },
         ]
       }
       readOnly={false}
@@ -523,8 +739,9 @@ exports[`components/admin_console/permission_schemes_settings/permission_tree sh
     <PermissionGroup
       additionalValues={
         Object {
-          "edit_post": Object {
-            "editTimeLimitButton": <Connect(EditPostTimeLimitButton)
+          "guest_edit_post": Object {
+            "editTimeLimitButton": <Memo(Connect(EditPostTimeLimitButton))
+              isDisabled={false}
               onClick={[Function]}
             />,
           },
@@ -541,20 +758,56 @@ exports[`components/admin_console/permission_schemes_settings/permission_tree sh
       }
       permissions={
         Array [
-          "create_private_channel",
-          "edit_post",
-          "delete_post",
           Object {
             "combined": true,
-            "id": "reactions",
+            "id": "guest_create_private_channel",
+            "permissions": Array [
+              "create_private_channel",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_edit_post",
+            "permissions": Array [
+              "edit_post",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_delete_post",
+            "permissions": Array [
+              "delete_post",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_reactions",
             "permissions": Array [
               "add_reaction",
               "remove_reaction",
             ],
           },
-          "use_channel_mentions",
-          "use_group_mentions",
-          "create_post",
+          Object {
+            "combined": true,
+            "id": "guest_use_channel_mentions",
+            "permissions": Array [
+              "use_channel_mentions",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_use_group_mentions",
+            "permissions": Array [
+              "use_group_mentions",
+            ],
+          },
+          Object {
+            "combined": true,
+            "id": "guest_create_post",
+            "permissions": Array [
+              "create_post",
+            ],
+          },
         ]
       }
       readOnly={false}
