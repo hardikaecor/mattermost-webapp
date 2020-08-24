@@ -52,7 +52,7 @@ export default class SettingItemMin extends React.PureComponent<Props> {
     handleUpdateSection = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
         if (this.props.section != 'password' && this.props.section != 'email') {
-            this.props.actions.updateActiveSection(this.props.section);
+            // this.props.actions.updateActiveSection(this.props.section);
             this.props.updateSection(this.props.section);
         }
     }
