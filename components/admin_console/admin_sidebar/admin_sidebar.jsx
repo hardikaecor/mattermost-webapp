@@ -1,23 +1,24 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+/* eslint-disable react/no-string-refs */
 
 import PropTypes from 'prop-types';
 import React from 'react';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 import Scrollbars from 'react-custom-scrollbars';
 import isEqual from 'lodash/isEqual';
 
 import * as Utils from 'utils/utils.jsx';
-import Constants from 'utils/constants';
 import {generateIndex} from 'utils/admin_console_index.jsx';
 import {browserHistory} from 'utils/browser_history';
+import {intlShape} from 'utils/react_intl';
 
 import AdminSidebarCategory from 'components/admin_console/admin_sidebar_category.jsx';
 import AdminSidebarHeader from 'components/admin_console/admin_sidebar_header';
 import AdminSidebarSection from 'components/admin_console/admin_sidebar_section.jsx';
 import Highlight from 'components/admin_console/highlight';
 import SearchIcon from 'components/widgets/icons/search_icon.jsx';
+import QuickInput from 'components/quick_input';
 
 const renderScrollView = (props) => (
     <div
@@ -40,9 +41,8 @@ const renderScrollThumbVertical = (props) => (
     />
 );
 
-class AdminSidebar extends React.Component {
+class AdminSidebar extends React.PureComponent {
     static propTypes = {
-        intl: PropTypes.any,
         license: PropTypes.object.isRequired,
         config: PropTypes.object,
         plugins: PropTypes.object,
@@ -51,6 +51,8 @@ class AdminSidebar extends React.Component {
         siteName: PropTypes.string,
         onFilterChange: PropTypes.func.isRequired,
         navigationBlocked: PropTypes.bool.isRequired,
+        consoleAccess: PropTypes.object,
+        intl: intlShape.isRequired,
         actions: PropTypes.shape({
 
             /*
@@ -90,7 +92,7 @@ class AdminSidebar extends React.Component {
         if (this.idx !== null &&
             (!isEqual(this.props.plugins, prevProps.plugins) ||
                 !isEqual(this.props.adminDefinition, prevProps.adminDefinition))) {
-            this.idx = generateIndex(this.props.adminDefinition, this.props.plugins, this.context.intl);
+            this.idx = generateIndex(this.props.adminDefinition, this.props.plugins, this.props.intl);
         }
     }
 
@@ -143,6 +145,7 @@ class AdminSidebar extends React.Component {
     }
 
     visibleSections = () => {
+        const {config, license, buildEnterpriseReady, consoleAccess, adminDefinition} = this.props;
         const isVisible = (item) => {
             if (!item.schema) {
                 return false;
@@ -152,13 +155,13 @@ class AdminSidebar extends React.Component {
                 return false;
             }
 
-            if (item.isHidden && item.isHidden(this.props.config, {}, this.props.license, this.props.buildEnterpriseReady)) {
+            if (item.isHidden && item.isHidden(config, this.state, license, buildEnterpriseReady, consoleAccess)) {
                 return false;
             }
             return true;
         };
         const result = new Set();
-        for (const section of Object.values(this.props.adminDefinition)) {
+        for (const section of Object.values(adminDefinition)) {
             for (const item of Object.values(section)) {
                 if (isVisible(item)) {
                     result.add(item.url);
@@ -169,116 +172,117 @@ class AdminSidebar extends React.Component {
     }
 
     renderRootMenu = (definition) => {
+        const {config, license, buildEnterpriseReady, consoleAccess} = this.props;
         const sidebarSections = [];
-        Object.values(definition).forEach((section, sectionIndex) => {
-            const sidebarItems = [];
-            Object.values(section).forEach((item, itemIndex) => {
-                if (!item.title) {
-                    return;
-                }
-
-                if (item.isHidden && item.isHidden(this.props.config, {}, this.props.license, this.props.buildEnterpriseReady)) {
-                    return;
-                }
-
-                if (this.state.sections !== null) {
-                    let active = false;
-                    for (const url of this.state.sections) {
-                        if (url === item.url) {
-                            active = true;
-                        }
-                    }
-                    if (!active) {
+        Object.entries(definition).forEach(([key, section]) => {
+            let isSectionHidden = false;
+            if (section.isHidden) {
+                isSectionHidden = typeof section.isHidden === 'function' ? section.isHidden(config, this.state, license, buildEnterpriseReady, consoleAccess) : Boolean(section.isHidden);
+            }
+            if (!isSectionHidden) {
+                const sidebarItems = [];
+                Object.entries(section).forEach(([subKey, item]) => {
+                    if (!item.title) {
                         return;
                     }
+
+                    if (item.isHidden) {
+                        if (typeof item.isHidden === 'function' ? item.isHidden(config, this.state, license, buildEnterpriseReady, consoleAccess) : Boolean(item.isHidden)) {
+                            return;
+                        }
+                    }
+
+                    if (this.state.sections !== null) {
+                        let active = false;
+                        for (const url of this.state.sections) {
+                            if (url === item.url) {
+                                active = true;
+                            }
+                        }
+                        if (!active) {
+                            return;
+                        }
+                    }
+                    const subDefinitionKey = `${key}.${subKey}`;
+                    sidebarItems.push((
+                        <AdminSidebarSection
+                            key={subDefinitionKey}
+                            definitionKey={subDefinitionKey}
+                            name={item.url}
+                            title={
+                                <FormattedMessage
+                                    id={item.title}
+                                    defaultMessage={item.title_default}
+                                />
+                            }
+                        />
+                    ));
+                });
+
+                // Special case for plugins entries
+                let moreSidebarItems = [];
+                if (section.id === 'plugins') {
+                    moreSidebarItems = this.renderPluginsMenu();
                 }
 
-                sidebarItems.push((
-                    <AdminSidebarSection
-                        key={itemIndex}
-                        name={item.url}
-                        title={
-                            <FormattedMessage
-                                id={item.title}
-                                defaultMessage={item.title_default}
-                            />
-                        }
-                    />
-                ));
-            });
+                // If no visible items, don't display this section
+                if (sidebarItems.length === 0 && moreSidebarItems.length === 0) {
+                    return null;
+                }
 
-            // Special case for plugins entries
-            let moreSidebarItems = [];
-            if (section.id === 'plugins') {
-                moreSidebarItems = this.renderPluginsMenu();
-            }
-
-            // If no visible items, don't display this section
-            if (sidebarItems.length === 0 && moreSidebarItems.length === 0) {
-                return null;
-            }
-
-            if (sidebarItems.length || moreSidebarItems.length) {
-                sidebarSections.push((
-                    <AdminSidebarCategory
-                        key={sectionIndex}
-                        parentLink='/admin_console'
-                        icon={section.icon}
-                        sectionClass=''
-                        title={
-                            <FormattedMessage
-                                id={section.sectionTitle}
-                                defaultMessage={section.sectionTitleDefault}
-                            />
-                        }
-                    >
-                        {sidebarItems}
-                        {moreSidebarItems}
-                    </AdminSidebarCategory>
-                ));
+                if (sidebarItems.length || moreSidebarItems.length) {
+                    sidebarSections.push((
+                        <AdminSidebarCategory
+                            key={key}
+                            definitionKey={key}
+                            parentLink='/admin_console'
+                            icon={section.icon}
+                            sectionClass=''
+                            title={
+                                <FormattedMessage
+                                    id={section.sectionTitle}
+                                    defaultMessage={section.sectionTitleDefault}
+                                />
+                            }
+                        >
+                            {sidebarItems}
+                            {moreSidebarItems}
+                        </AdminSidebarCategory>
+                    ));
+                }
             }
             return null;
         });
         return sidebarSections;
     }
 
+    isPluginPresentInSections = (plugin) => {
+        return this.state.sections && this.state.sections.indexOf(`plugin_${plugin.id}`) !== -1;
+    }
+
     renderPluginsMenu = () => {
-        const customPlugins = [];
         if (this.props.config.PluginSettings.Enable) {
-            Object.values(this.props.plugins).sort((a, b) => {
+            return Object.values(this.props.plugins).sort((a, b) => {
                 const nameCompare = a.name.localeCompare(b.name);
                 if (nameCompare !== 0) {
                     return nameCompare;
                 }
 
                 return a.id.localeCompare(b.id);
-            }).forEach((p) => {
-                const hasSettings = p.settings_schema && (p.settings_schema.header || p.settings_schema.footer || p.settings_schema.settings);
-                if (!hasSettings) {
-                    return;
-                }
-
-                if (p.settings_schema.settings && (!p.settings_schema.header && !p.settings_schema.footer)) {
-                    if (p.settings_schema.settings.hasOwnProperty('length')) {
-                        if (p.settings_schema.settings.length === 0) {
-                            return;
-                        }
-                    }
-                }
-
-                if (this.state.sections !== null && this.state.sections.indexOf(`plugin_${p.id}`) === -1) {
-                    return;
-                }
-                customPlugins.push(
-                    <AdminSidebarSection
-                        key={'customplugin' + p.id}
-                        name={'plugins/plugin_' + p.id}
-                        title={p.name}
-                    />
-                );
-            });
+            }).
+                filter((plugin) => this.state.sections === null || this.isPluginPresentInSections(plugin)).
+                map((plugin) => {
+                    return (
+                        <AdminSidebarSection
+                            key={'customplugin' + plugin.id}
+                            name={'plugins/plugin_' + plugin.id}
+                            title={plugin.name}
+                        />
+                    );
+                });
         }
-        return customPlugins;
+
+        return [];
     }
 
     handleClearFilter = () => {
@@ -287,17 +291,26 @@ class AdminSidebar extends React.Component {
     }
 
     render() {
-        const filterClearTooltip = (
-            <Tooltip id='admin-sidebar-fitler-clear'>
-                <FormattedMessage
-                    id='admin.sidebar.filter-clear'
-                    defaultMessage='Clear search'
-                />
-            </Tooltip>
-        );
         return (
             <div className='admin-sidebar'>
                 <AdminSidebarHeader/>
+                <div className='filter-container'>
+                    <SearchIcon
+                        className='search__icon'
+                        aria-hidden='true'
+                    />
+                    <QuickInput
+                        className={'filter ' + (this.state.filter ? 'active' : '')}
+                        type='text'
+                        onChange={this.onFilterChange}
+                        value={this.state.filter}
+                        placeholder={Utils.localizeMessage('admin.sidebar.filter', 'Find settings')}
+                        ref={this.searchRef}
+                        id='adminSidebarFilter'
+                        clearable={true}
+                        onClear={this.handleClearFilter}
+                    />
+                </div>
                 <Scrollbars
                     ref='scrollbar'
                     autoHide={true}
@@ -310,39 +323,6 @@ class AdminSidebar extends React.Component {
                     <div className='nav-pills__container'>
                         <Highlight filter={this.state.filter}>
                             <ul className='nav nav-pills nav-stacked'>
-                                <li className='filter-container'>
-                                    <SearchIcon
-                                        className='search__icon'
-                                        aria-hidden='true'
-                                    />
-                                    <input
-                                        className={'filter ' + (this.state.filter ? 'active' : '')}
-                                        type='text'
-                                        onChange={this.onFilterChange}
-                                        value={this.state.filter}
-                                        placeholder={Utils.localizeMessage('admin.sidebar.filter', 'Find settings')}
-                                        ref={this.searchRef}
-                                        id='adminSidebarFilter'
-                                    />
-                                    {this.state.filter &&
-                                        <div
-                                            className='sidebar__search-clear visible'
-                                            onClick={this.handleClearFilter}
-                                        >
-                                            <OverlayTrigger
-                                                delayShow={Constants.OVERLAY_TIME_DELAY}
-                                                placement='bottom'
-                                                overlay={filterClearTooltip}
-                                            >
-                                                <span
-                                                    className='sidebar__search-clear-x'
-                                                    aria-hidden='true'
-                                                >
-                                                    {'×'}
-                                                </span>
-                                            </OverlayTrigger>
-                                        </div>}
-                                </li>
                                 {this.renderRootMenu(this.props.adminDefinition)}
                             </ul>
                         </Highlight>
@@ -354,3 +334,4 @@ class AdminSidebar extends React.Component {
 }
 
 export default injectIntl(AdminSidebar);
+/* eslint-enable react/no-string-refs */

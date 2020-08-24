@@ -17,7 +17,7 @@ import Suggestion from './suggestion.jsx';
 import Provider from './provider.jsx';
 
 export const MIN_EMOTICON_LENGTH = 2;
-export const EMOJI_CATEGORY_SUGGESTION_BLACKLIST = ['skintone'];
+export const EMOJI_CATEGORY_SUGGESTION_BLOCKLIST = ['skintone'];
 
 class EmoticonSuggestion extends Suggestion {
     render() {
@@ -33,6 +33,7 @@ class EmoticonSuggestion extends Suggestion {
             <div
                 className={className}
                 onClick={this.handleClick}
+                onMouseMove={this.handleMouseMove}
                 {...Suggestion.baseProps}
             >
                 <div className='pull-left'>
@@ -109,7 +110,7 @@ export default class EmoticonProvider extends Provider {
 
         // Check for named emoji
         for (const [name, emoji] of emojiMap) {
-            if (EMOJI_CATEGORY_SUGGESTION_BLACKLIST.includes(emoji.category)) {
+            if (EMOJI_CATEGORY_SUGGESTION_BLOCKLIST.includes(emoji.category)) {
                 continue;
             }
 

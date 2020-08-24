@@ -3,16 +3,15 @@
 
 import React from 'react';
 
-import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
-
 import {samplePlugin1} from 'tests/helpers/admin_console_plugin_index_sample_pluings';
+import {shallowWithIntl} from 'tests/helpers/intl-test-helper';
 
 import AdminSidebar from 'components/admin_console/admin_sidebar/admin_sidebar.jsx';
 import AdminDefinition from 'components/admin_console/admin_definition';
 import {generateIndex} from 'utils/admin_console_index';
 
 jest.mock('utils/utils', () => {
-    const original = require.requireActual('utils/utils');
+    const original = jest.requireActual('utils/utils');
     return {
         ...original,
         isMobile: jest.fn(() => true),
@@ -56,16 +55,75 @@ describe('components/AdminSidebar', () => {
         actions: {
             getPlugins: jest.fn(),
         },
+        consoleAccess: {
+            read: {
+                about: true,
+                reporting: true,
+                user_management: true,
+                environment: true,
+                site_configuration: true,
+                authentication: true,
+                plugins: true,
+                integrations: true,
+                compliance: true,
+                experimental: true,
+            },
+            write: {
+                about: true,
+                reporting: true,
+                user_management: true,
+                environment: true,
+                site_configuration: true,
+                authentication: true,
+                plugins: true,
+                integrations: true,
+                compliance: true,
+                experimental: true,
+            },
+        },
     };
 
     test('should match snapshot', () => {
         const props = {...defaultProps};
-        const context = {router: {}};
-        const wrapper = shallowWithIntl(<AdminSidebar {...props}/>, {context});
+        const wrapper = shallowWithIntl(<AdminSidebar {...props}/>);
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should match snapshot, not render the plugin in the sidebar because does not have settings', () => {
+    test('should match snapshot, no access', () => {
+        const ca = {
+            consoleAccess: {
+                read: {
+                    about: false,
+                    reporting: false,
+                    user_management: false,
+                    environment: false,
+                    site_configuration: false,
+                    authentication: false,
+                    plugins: false,
+                    integrations: false,
+                    compliance: false,
+                    experimental: false,
+                },
+                write: {
+                    about: false,
+                    reporting: false,
+                    user_management: false,
+                    environment: false,
+                    site_configuration: false,
+                    authentication: false,
+                    plugins: false,
+                    integrations: false,
+                    compliance: false,
+                    experimental: false,
+                },
+            },
+        };
+        const props = {...defaultProps, ...ca};
+        const wrapper = shallowWithIntl(<AdminSidebar {...props}/>);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should match snapshot, render plugins without any settings as well', () => {
         const props = {
             license: {},
             config: {
@@ -102,8 +160,7 @@ describe('components/AdminSidebar', () => {
             },
         };
 
-        const context = {router: {}};
-        const wrapper = shallowWithIntl(<AdminSidebar {...props}/>, {context});
+        const wrapper = shallowWithIntl(<AdminSidebar {...props}/>);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -140,8 +197,7 @@ describe('components/AdminSidebar', () => {
             },
         };
 
-        const context = {router: {}};
-        const wrapper = shallowWithIntl(<AdminSidebar {...props}/>, {context});
+        const wrapper = shallowWithIntl(<AdminSidebar {...props}/>);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -184,8 +240,7 @@ describe('components/AdminSidebar', () => {
             },
         };
 
-        const context = {router: {}};
-        const wrapper = shallowWithIntl(<AdminSidebar {...props}/>, {context});
+        const wrapper = shallowWithIntl(<AdminSidebar {...props}/>);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -239,8 +294,7 @@ describe('components/AdminSidebar', () => {
             },
         };
 
-        const context = {router: {}};
-        const wrapper = shallowWithIntl(<AdminSidebar {...props}/>, {context});
+        const wrapper = shallowWithIntl(<AdminSidebar {...props}/>);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -278,7 +332,8 @@ describe('components/AdminSidebar', () => {
 
         test('should refresh the index in case idx is already present and there is a change in plugins or adminDefinition prop', () => {
             generateIndex.mockReturnValue(['mocked-index']);
-            const wrapper = shallowWithIntl(<AdminSidebar {...props}/>, {lifecycleExperimental: true});
+
+            const wrapper = shallowWithIntl(<AdminSidebar {...props}/>);
             wrapper.instance().idx = ['some value'];
 
             expect(generateIndex).toHaveBeenCalledTimes(0);
@@ -292,7 +347,8 @@ describe('components/AdminSidebar', () => {
 
         test('should not call the generate index in case of idx is not already present', () => {
             generateIndex.mockReturnValue(['mocked-index']);
-            const wrapper = shallowWithIntl(<AdminSidebar {...props}/>, {lifecycleExperimental: true});
+
+            const wrapper = shallowWithIntl(<AdminSidebar {...props}/>);
 
             expect(generateIndex).toHaveBeenCalledTimes(0);
 
@@ -305,7 +361,8 @@ describe('components/AdminSidebar', () => {
 
         test('should not generate index in case of same props', () => {
             generateIndex.mockReturnValue(['mocked-index']);
-            const wrapper = shallowWithIntl(<AdminSidebar {...props}/>, {lifecycleExperimental: true});
+
+            const wrapper = shallowWithIntl(<AdminSidebar {...props}/>);
             wrapper.instance().idx = ['some value'];
 
             expect(generateIndex).toHaveBeenCalledTimes(0);
@@ -352,6 +409,11 @@ describe('components/AdminSidebar', () => {
             onFilterChange: jest.fn(),
             actions: {
                 getPlugins: jest.fn(),
+            },
+            consoleAccess: {
+                read: {
+                    plugins: true,
+                },
             },
         };
 

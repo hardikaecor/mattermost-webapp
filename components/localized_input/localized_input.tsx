@@ -11,6 +11,7 @@ type Props = {
         values?: {string: any};
     };
     value?: string;
+    disabled?: boolean;
 };
 
 const LocalizedInput = React.forwardRef((props: Props, ref?: React.Ref<HTMLInputElement>) => {
@@ -22,11 +23,11 @@ const LocalizedInput = React.forwardRef((props: Props, ref?: React.Ref<HTMLInput
             defaultMessage={placeholder.defaultMessage}
             values={placeholder.values}
         >
-            {(localizedPlaceholder: string) => (
+            {(localizedPlaceholder: (string | JSX.Element)) => (
                 <input
                     {...otherProps}
                     ref={ref}
-                    placeholder={localizedPlaceholder}
+                    placeholder={localizedPlaceholder as string}
                 />
             )}
         </FormattedMessage>

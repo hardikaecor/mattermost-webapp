@@ -14,6 +14,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       onClick={[Function]}
     />
     <PermissionCheckbox
+      id="uniqId-checkbox"
       value=""
     />
     <span
@@ -25,6 +26,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       />
     </span>
     <injectIntl(PermissionDescription)
+      additionalValues={Object {}}
       id="name"
       inherited={null}
       rowType="group"
@@ -74,6 +76,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       onClick={[Function]}
     />
     <PermissionCheckbox
+      id="uniqId-checkbox"
       value=""
     />
     <span
@@ -85,6 +88,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       />
     </span>
     <injectIntl(PermissionDescription)
+      additionalValues={Object {}}
       id="name"
       inherited={null}
       rowType="group"
@@ -134,6 +138,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       onClick={[Function]}
     />
     <PermissionCheckbox
+      id="uniqId-checkbox"
       value=""
     />
     <span
@@ -145,6 +150,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       />
     </span>
     <injectIntl(PermissionDescription)
+      additionalValues={Object {}}
       id="name"
       inherited={null}
       rowType="group"
@@ -194,6 +200,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       onClick={[Function]}
     />
     <PermissionCheckbox
+      id="uniqId-checkbox"
       value="checked"
     />
     <span
@@ -205,6 +212,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       />
     </span>
     <injectIntl(PermissionDescription)
+      additionalValues={Object {}}
       id="name"
       inherited={null}
       rowType="group"
@@ -254,6 +262,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       onClick={[Function]}
     />
     <PermissionCheckbox
+      id="uniqId-checkbox"
       value="checked"
     />
     <span
@@ -265,6 +274,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       />
     </span>
     <injectIntl(PermissionDescription)
+      additionalValues={Object {}}
       id="name"
       inherited={null}
       rowType="group"
@@ -314,6 +324,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       onClick={[Function]}
     />
     <PermissionCheckbox
+      id="uniqId-checkbox"
       value="checked"
     />
     <span
@@ -325,6 +336,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       />
     </span>
     <injectIntl(PermissionDescription)
+      additionalValues={Object {}}
       id="name"
       inherited={null}
       rowType="group"
@@ -388,6 +400,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       onClick={[Function]}
     />
     <PermissionCheckbox
+      id="uniqId-checkbox"
       value="intermediate"
     />
     <span
@@ -399,6 +412,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       />
     </span>
     <injectIntl(PermissionDescription)
+      additionalValues={Object {}}
       id="name"
       inherited={null}
       rowType="group"
@@ -448,6 +462,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       onClick={[Function]}
     />
     <PermissionCheckbox
+      id="uniqId-checkbox"
       value="intermediate"
     />
     <span
@@ -459,6 +474,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       />
     </span>
     <injectIntl(PermissionDescription)
+      additionalValues={Object {}}
       id="name"
       inherited={null}
       rowType="group"
@@ -508,6 +524,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       onClick={[Function]}
     />
     <PermissionCheckbox
+      id="uniqId-checkbox"
       value="intermediate"
     />
     <span
@@ -519,6 +536,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       />
     </span>
     <injectIntl(PermissionDescription)
+      additionalValues={Object {}}
       id="name"
       inherited={null}
       rowType="group"
@@ -574,6 +592,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       onClick={[Function]}
     />
     <PermissionCheckbox
+      id="uniqId-checkbox"
       value=""
     />
     <span
@@ -585,6 +604,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       />
     </span>
     <injectIntl(PermissionDescription)
+      additionalValues={Object {}}
       id="name"
       inherited={null}
       rowType="group"
@@ -634,6 +654,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       onClick={[Function]}
     />
     <PermissionCheckbox
+      id="uniqId-checkbox"
       value=""
     />
     <span
@@ -645,6 +666,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       />
     </span>
     <injectIntl(PermissionDescription)
+      additionalValues={Object {}}
       id="name"
       inherited={null}
       rowType="group"
@@ -694,6 +716,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       onClick={[Function]}
     />
     <PermissionCheckbox
+      id="uniqId-checkbox"
       value=""
     />
     <span
@@ -705,6 +728,7 @@ exports[`components/admin_console/permission_schemes_settings/permission_group s
       />
     </span>
     <injectIntl(PermissionDescription)
+      additionalValues={Object {}}
       id="name"
       inherited={null}
       rowType="group"

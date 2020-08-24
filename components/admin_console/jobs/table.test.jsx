@@ -73,20 +73,18 @@ describe('components/admin_console/jobs/table', () => {
             id: '1236',
             status: 'error',
             type: 'data_retention',
+        }, {
+            created_at: 1540834294674,
+            last_activity_at: 1540834294674,
+            id: '1236',
+            status: 'warning',
+            type: 'data_retention',
         }],
     };
 
-    test('should match snapshot, init', () => {
-        const wrapper = shallowWithIntl(
-            <JobTable {...baseProps}/>
-        );
-
-        expect(wrapper).toMatchSnapshot();
-    });
-
     test('should call create job func', () => {
         const wrapper = shallowWithIntl(
-            <JobTable {...baseProps}/>
+            <JobTable {...baseProps}/>,
         );
 
         wrapper.find('.job-table__create-button > div > .btn-default').simulate('click', {preventDefault: jest.fn()});
@@ -95,7 +93,7 @@ describe('components/admin_console/jobs/table', () => {
 
     test('should call cancel job func', () => {
         const wrapper = shallowWithIntl(
-            <JobTable {...baseProps}/>
+            <JobTable {...baseProps}/>,
         );
 
         wrapper.find('.job-table__cancel-button').first().simulate('click', {preventDefault: jest.fn(), currentTarget: {getAttribute: () => '1234'}});

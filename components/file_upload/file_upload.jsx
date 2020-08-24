@@ -15,12 +15,14 @@ import {
     isMobileApp,
 } from 'utils/user_agent';
 import {getTable} from 'utils/paste';
+import {intlShape} from 'utils/react_intl';
 import {
     clearFileInput,
     cmdOrCtrlPressed,
     isKeyPressed,
     generateId,
     isFileTransfer,
+    isUriDrop,
     localizeMessage,
 } from 'utils/utils.jsx';
 
@@ -73,11 +75,6 @@ class FileUpload extends PureComponent {
     static propTypes = {
 
         /**
-         * react-intl API
-        */
-        intl: PropTypes.any,
-
-        /**
          * Current channel's ID
          */
         currentChannelId: PropTypes.string.isRequired,
@@ -96,6 +93,8 @@ class FileUpload extends PureComponent {
          * Function to get file upload targeted input
          */
         getTarget: PropTypes.func.isRequired,
+
+        intl: intlShape.isRequired,
 
         locale: PropTypes.string.isRequired,
 
@@ -355,7 +354,7 @@ class FileUpload extends PureComponent {
         const files = [];
         Array.from(droppedFiles).forEach((file, index) => {
             const item = items[index];
-            if (item && item.webkitGetAsEntry && item.webkitGetAsEntry().isDirectory) {
+            if (item && item.webkitGetAsEntry && (item.webkitGetAsEntry() === null || item.webkitGetAsEntry().isDirectory)) {
                 return;
             }
             files.push(file);
@@ -363,6 +362,10 @@ class FileUpload extends PureComponent {
 
         const types = e.dataTransfer.types;
         if (types) {
+            if (isUriDrop(e.dataTransfer)) {
+                return;
+            }
+
             // For non-IE browsers
             if (types.includes && !types.includes('Files')) {
                 return;
@@ -400,15 +403,14 @@ class FileUpload extends PureComponent {
             dragsterActions = {
                 enter(e) {
                     var files = e.detail.dataTransfer;
-
-                    if (isFileTransfer(files)) {
+                    if (!isUriDrop(files) && isFileTransfer(files)) {
                         overlay.classList.remove('hidden');
                     }
                 },
                 leave(e) {
                     var files = e.detail.dataTransfer;
 
-                    if (isFileTransfer(files)) {
+                    if (!isUriDrop(files) && isFileTransfer(files)) {
                         overlay.classList.add('hidden');
                     }
 
@@ -419,7 +421,6 @@ class FileUpload extends PureComponent {
                 },
                 drop(e) {
                     overlay.classList.add('hidden');
-
                     dragTimeout.cancel();
 
                     self.handleDrop(e.detail);
@@ -564,7 +565,9 @@ class FileUpload extends PureComponent {
         this.setState({menuOpen: false});
     }
 
-    simulateInputClick = () => {
+    simulateInputClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         this.fileInput.current.click();
     }
 
@@ -598,7 +601,7 @@ class FileUpload extends PureComponent {
                         onClick={this.simulateInputClick}
                         onTouchEnd={this.simulateInputClick}
                     >
-                        <AttachmentIcon/>
+                        <AttachmentIcon className='d-flex'/>
                     </button>
                     <input
                         id='fileUploadInput'
@@ -626,7 +629,9 @@ class FileUpload extends PureComponent {
                         }}
                     >
                         <a href='#'>
-                            <span className='margin-right'>{item.icon}</span>
+                            <span className='mr-2'>
+                                {item.icon}
+                            </span>
                             {item.text}
                         </a>
                     </li>
@@ -655,10 +660,11 @@ class FileUpload extends PureComponent {
                                 id='fileUploadButton'
                                 className='icon icon--attachment'
                             >
-                                <AttachmentIcon/>
+                                <AttachmentIcon className='d-flex'/>
                             </div>
                         </button>
                         <Menu
+                            id='fileUploadOptions'
                             openLeft={true}
                             openUp={true}
                             ariaLabel={formatMessage({id: 'file_upload.menuAriaLabel', defaultMessage: 'Upload type selector'})}
@@ -670,7 +676,9 @@ class FileUpload extends PureComponent {
                                     onClick={this.simulateInputClick}
                                     onTouchEnd={this.simulateInputClick}
                                 >
-                                    <span className='margin-right'><i className='fa fa-laptop'/></span>
+                                    <span className='mr-2'>
+                                        <i className='fa fa-laptop'/>
+                                    </span>
                                     <FormattedMessage
                                         id='yourcomputer'
                                         defaultMessage='Your computer'
@@ -696,4 +704,6 @@ class FileUpload extends PureComponent {
     }
 }
 
-export default injectIntl(FileUpload);
+const wrappedComponent = injectIntl(FileUpload, {forwardRef: true});
+wrappedComponent.displayName = 'injectIntl(FileUpload)';
+export default wrappedComponent;

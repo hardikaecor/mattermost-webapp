@@ -214,7 +214,15 @@ var config = {
                     {
                         loader: 'html-loader',
                         options: {
-                            attrs: 'link:href',
+                            attributes: {
+                                list: [
+                                    {
+                                        tag: 'link',
+                                        attribute: 'href',
+                                        type: 'src',
+                                    },
+                                ],
+                            },
                         },
                     },
                 ],
@@ -256,21 +264,23 @@ var config = {
             meta: {
                 csp: {
                     'http-equiv': 'Content-Security-Policy',
-                    content: 'script-src \'self\' cdn.segment.com/analytics.js/' + CSP_UNSAFE_EVAL_IF_DEV,
+                    content: 'script-src \'self\' cdn.rudderlabs.com/' + CSP_UNSAFE_EVAL_IF_DEV,
                 },
             },
         }),
-        new CopyWebpackPlugin([
-            {from: 'images/emoji', to: 'emoji'},
-            {from: 'images/img_trans.gif', to: 'images'},
-            {from: 'images/logo-email.png', to: 'images'},
-            {from: 'images/circles.png', to: 'images'},
-            {from: 'images/favicon', to: 'images/favicon'},
-            {from: 'images/appIcons.png', to: 'images'},
-            {from: 'images/warning.png', to: 'images'},
-            {from: 'images/logo-email.png', to: 'images'},
-            {from: 'images/browser-icons', to: 'images/browser-icons'},
-        ]),
+        new CopyWebpackPlugin({
+            patterns: [
+                {from: 'images/emoji', to: 'emoji'},
+                {from: 'images/img_trans.gif', to: 'images'},
+                {from: 'images/logo-email.png', to: 'images'},
+                {from: 'images/circles.png', to: 'images'},
+                {from: 'images/favicon', to: 'images/favicon'},
+                {from: 'images/appIcons.png', to: 'images'},
+                {from: 'images/warning.png', to: 'images'},
+                {from: 'images/logo-email.png', to: 'images'},
+                {from: 'images/browser-icons', to: 'images/browser-icons'},
+            ],
+        }),
 
         // Generate manifest.json, honouring any configured publicPath. This also handles injecting
         // <link rel="apple-touch-icon" ... /> and <meta name="apple-*" ... /> tags into root.html.
@@ -360,6 +370,8 @@ if (!DEV) {
 const env = {};
 if (DEV) {
     env.PUBLIC_PATH = JSON.stringify(publicPath);
+    env.RUDDER_KEY = JSON.stringify(process.env.RUDDER_KEY || ''); //eslint-disable-line no-process-env
+    env.RUDDER_DATAPLANE_URL = JSON.stringify(process.env.RUDDER_DATAPLANE_URL || ''); //eslint-disable-line no-process-env
     if (process.env.MM_LIVE_RELOAD) { //eslint-disable-line no-process-env
         config.plugins.push(new LiveReloadPlugin());
     }

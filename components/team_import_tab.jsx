@@ -1,5 +1,6 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+/* eslint-disable react/no-string-refs */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -22,7 +23,12 @@ const holders = defineMessages({
     },
 });
 
-class TeamImportTab extends React.Component {
+class TeamImportTab extends React.PureComponent {
+    static propTypes = {
+        closeModal: PropTypes.func.isRequired,
+        collapseModal: PropTypes.func.isRequired,
+    };
+
     constructor(props) {
         super(props);
 
@@ -42,11 +48,10 @@ class TeamImportTab extends React.Component {
 
     doImportSlack = (file) => {
         this.setState({status: 'in-progress', link: ''});
-        utils.importSlack(file, this.onImportSuccess, this.onImportFailure);
+        utils.importSlack(this.props.team.id, file, this.onImportSuccess, this.onImportFailure);
     }
 
     render() {
-        const {formatMessage} = this.props.intl;
         const uploadDocsLink = (
             <a
                 href='https://docs.mattermost.com/administration/migrating.html#migrating-from-slack'
@@ -136,7 +141,7 @@ class TeamImportTab extends React.Component {
 
         const uploadSection = (
             <SettingUpload
-                title={formatMessage(holders.importSlack)}
+                title={<FormattedMessage {...holders.importSlack}/>}
                 submit={this.doImportSlack}
                 helpText={uploadHelpText}
                 fileTypesAccepted='.zip'
@@ -245,9 +250,10 @@ class TeamImportTab extends React.Component {
 }
 
 TeamImportTab.propTypes = {
-    intl: PropTypes.any,
     closeModal: PropTypes.func.isRequired,
     collapseModal: PropTypes.func.isRequired,
+    team: PropTypes.object.isRequired,
 };
 
 export default injectIntl(TeamImportTab);
+/* eslint-enable react/no-string-refs */

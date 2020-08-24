@@ -3,7 +3,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import {injectIntl} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 import AsyncSelect from 'react-select/lib/AsyncCreatable';
 import {components} from 'react-select';
 import classNames from 'classnames';
@@ -24,10 +24,10 @@ import {isGuest} from 'utils/utils';
 
 import './users_emails_input.scss';
 
-class UsersEmailsInput extends React.Component {
+export default class UsersEmailsInput extends React.PureComponent {
     static propTypes = {
-        intl: PropTypes.any,
         placeholder: PropTypes.string,
+        ariaLabel: PropTypes.string.isRequired,
         usersLoader: PropTypes.func,
         onChange: PropTypes.func,
         value: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object, PropTypes.string])),
@@ -39,6 +39,7 @@ class UsersEmailsInput extends React.Component {
         validAddressMessageDefault: PropTypes.string,
         loadingMessageId: PropTypes.string,
         loadingMessageDefault: PropTypes.string,
+        emailInvitationsEnabled: PropTypes.bool,
     }
 
     static defaultProps = {
@@ -79,11 +80,12 @@ class UsersEmailsInput extends React.Component {
     }
 
     loadingMessage = () => {
-        const {intl, loadingMessageId, loadingMessageDefault} = this.props;
-        const text = intl.formatMessage({
-            id: loadingMessageId,
-            defaultMessage: loadingMessageDefault,
-        });
+        const text = (
+            <FormattedMessage
+                id={this.props.loadingMessageId}
+                defaultMessage={this.props.loadingMessageDefault}
+            />
+        );
 
         return (<LoadingSpinner text={text}/>);
     }
@@ -93,7 +95,7 @@ class UsersEmailsInput extends React.Component {
     }
 
     formatOptionLabel = (user, options) => {
-        const profileImg = imageURLForUser(user);
+        const profileImg = imageURLForUser(user.id, user.last_picture_update);
         let guestBadge = null;
         if (!isEmail(user.value) && isGuest(user)) {
             guestBadge = <GuestBadge/>;
@@ -157,6 +159,7 @@ class UsersEmailsInput extends React.Component {
                 id={this.props.validAddressMessageId}
                 defaultMessage={this.props.validAddressMessageDefault}
                 values={{email: value}}
+                disableLinks={true}
             />
         </React.Fragment>
     );
@@ -172,6 +175,7 @@ class UsersEmailsInput extends React.Component {
                     id={this.props.noMatchMessageId}
                     defaultMessage={this.props.noMatchMessageDefault}
                     values={{text: inputValue}}
+                    disableLinks={true}
                 >
                     {(message) => (
                         <components.NoOptionsMessage {...props}>
@@ -196,7 +200,7 @@ class UsersEmailsInput extends React.Component {
     };
 
     handleInputChange = (inputValue, action) => {
-        if (action.action === 'input-blur') {
+        if (action.action === 'input-blur' && inputValue !== '') {
             const values = this.props.value.map((v) => {
                 if (v.id) {
                     return v;
@@ -216,7 +220,7 @@ class UsersEmailsInput extends React.Component {
                 }
             }
 
-            if (isEmail(this.props.inputValue)) {
+            if (this.props.emailInvitationsEnabled && isEmail(this.props.inputValue)) {
                 const email = this.props.inputValue;
                 this.onChange([...values, {value: email, label: email}]);
                 this.props.onInputChange('');
@@ -239,7 +243,7 @@ class UsersEmailsInput extends React.Component {
     }
 
     showAddEmail = (input, values, options) => {
-        return options.length === 0 && isEmail(input);
+        return this.props.emailInvitationsEnabled && options.length === 0 && isEmail(input);
     }
 
     onFocus = () => {
@@ -278,9 +282,8 @@ class UsersEmailsInput extends React.Component {
                 onFocus={this.onFocus}
                 tabSelectsValue={true}
                 value={values}
+                aria-label={this.props.ariaLabel}
             />
         );
     }
 }
-
-export default injectIntl(UsersEmailsInput);

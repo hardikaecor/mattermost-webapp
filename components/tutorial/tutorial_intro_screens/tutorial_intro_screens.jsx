@@ -14,7 +14,7 @@ import InvitationModal from 'components/invitation_modal';
 
 const NUM_SCREENS = 3;
 
-export default class TutorialIntroScreens extends React.Component {
+export default class TutorialIntroScreens extends React.PureComponent {
     static propTypes = {
         currentUserId: PropTypes.string.isRequired,
         step: PropTypes.number,
@@ -187,7 +187,7 @@ export default class TutorialIntroScreens extends React.Component {
                 <h3>
                     <FormattedMessage
                         id='tutorial_intro.screenTwo.title'
-                        defaultMessage='How Mattermost works:'
+                        defaultMessage='How Mattermost Works:'
                     />
                 </h3>
                 <p>
@@ -223,7 +223,7 @@ export default class TutorialIntroScreens extends React.Component {
                 >
                     <FormattedMessage
                         id='tutorial_intro.invite'
-                        defaultMessage='Invite teammates'
+                        defaultMessage='Invite Teammates'
                     />
                 </ModalToggleButtonRedux>
             );
@@ -304,7 +304,7 @@ export default class TutorialIntroScreens extends React.Component {
                     className={className}
                     data-screen={i}
                     onClick={(e) => this.handleCircleClick(e, i)}
-                />
+                />,
             );
         }
 
@@ -330,7 +330,6 @@ export default class TutorialIntroScreens extends React.Component {
                             <button
                                 id='tutorialNextButton'
                                 className='btn btn-primary'
-                                tabIndex='1'
                                 onClick={this.handleNext}
                             >
                                 <FormattedMessage
@@ -346,7 +345,7 @@ export default class TutorialIntroScreens extends React.Component {
                             >
                                 <FormattedMessage
                                     id='tutorial_intro.skip'
-                                    defaultMessage='Skip tutorial'
+                                    defaultMessage='Skip Tutorial'
                                 />
                             </a>
                         </div>

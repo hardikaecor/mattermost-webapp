@@ -3,9 +3,9 @@
 
 import PropTypes from 'prop-types';
 import React, {
-    ReactElement,
     ExoticComponent,
     ForwardRefExoticComponent,
+    ReactElement,
 } from 'react';
 import {
     createIntl,
@@ -20,7 +20,10 @@ import {
     MountRendererProps,
 } from 'enzyme';
 
+import {doAddLocaleData} from 'i18n/i18n';
 import defaultMessages from 'i18n/en.json';
+
+doAddLocaleData();
 
 export const defaultIntl = createIntl({
     locale: 'en',
@@ -62,6 +65,7 @@ export function shallowWithIntl<T extends IntlInjectedElement>(element: T, optio
 
     // eslint-disable-next-line no-param-reassign
     element = unwrapForwardRef<T>(element);
+
     if (!isIntlInjectedElement(element)) {
         throw new Error('shallowWithIntl() allows only components wrapped by injectIntl() HOC. Use shallow() instead.');
     }
@@ -84,9 +88,6 @@ interface MountWithIntlOptions extends MountRendererProps {
 }
 export function mountWithIntl<T extends ReactElement | IntlInjectedElement>(element: T, options?: MountWithIntlOptions) {
     const {intl = defaultIntl, ...mountOptions} = options || {};
-
-    // eslint-disable-next-line no-param-reassign
-    element = unwrapForwardRef<T>(element);
 
     // Unwrap injectIntl
     const newElement = isIntlInjectedElement(element) ? (

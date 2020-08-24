@@ -2,7 +2,7 @@
 
 exports[`components/admin_console/system_users/list should match default snapshot 1`] = `
 <div>
-  <SearchableUserList
+  <injectIntl(SearchableUserList)
     actionProps={
       Object {
         "doEmailReset": [Function],
@@ -12,13 +12,19 @@ exports[`components/admin_console/system_users/list should match default snapsho
         "doPasswordReset": [Function],
         "enableUserAccessTokens": false,
         "experimentalEnableAuthenticationTransfer": false,
+        "isDisabled": false,
         "mfaEnabled": false,
       }
     }
-    actionUserProps={Object {}}
     actions={
       Array [
-        [Function],
+        Object {
+          "$$typeof": Symbol(react.memo),
+          "WrappedComponent": [Function],
+          "compare": null,
+          "displayName": "Connect(SystemUsersDropdown)",
+          "type": [Function],
+        },
       ]
     }
     enableUserAccessTokens={false}
@@ -26,6 +32,7 @@ exports[`components/admin_console/system_users/list should match default snapsho
     extraInfo={Object {}}
     filter=""
     focusOnMount={false}
+    isDisabled={false}
     mfaEnabled={false}
     nextPage={[Function]}
     onTermChange={[MockFunction]}
@@ -33,9 +40,16 @@ exports[`components/admin_console/system_users/list should match default snapsho
     previousPage={[Function]}
     renderCount={[Function]}
     renderFilterRow={[MockFunction]}
-    rowComponentType={[Function]}
+    rowComponentType={
+      Object {
+        "$$typeof": Symbol(react.memo),
+        "WrappedComponent": [Function],
+        "compare": null,
+        "displayName": "Connect(UserListRowWithError)",
+        "type": [Function],
+      }
+    }
     search={[Function]}
-    showTeamToggle={false}
     teamId=""
     term=""
     total={0}
@@ -74,7 +88,7 @@ exports[`components/admin_console/system_users/list should match default snapsho
 
 exports[`components/admin_console/system_users/list should match default snapshot, with users and mfa disabled 1`] = `
 <div>
-  <SearchableUserList
+  <injectIntl(SearchableUserList)
     actionProps={
       Object {
         "doEmailReset": [Function],
@@ -84,13 +98,19 @@ exports[`components/admin_console/system_users/list should match default snapsho
         "doPasswordReset": [Function],
         "enableUserAccessTokens": false,
         "experimentalEnableAuthenticationTransfer": false,
+        "isDisabled": false,
         "mfaEnabled": false,
       }
     }
-    actionUserProps={Object {}}
     actions={
       Array [
-        [Function],
+        Object {
+          "$$typeof": Symbol(react.memo),
+          "WrappedComponent": [Function],
+          "compare": null,
+          "displayName": "Connect(SystemUsersDropdown)",
+          "type": [Function],
+        },
       ]
     }
     enableUserAccessTokens={false}
@@ -196,6 +216,7 @@ exports[`components/admin_console/system_users/list should match default snapsho
     }
     filter=""
     focusOnMount={false}
+    isDisabled={false}
     mfaEnabled={false}
     nextPage={[Function]}
     onTermChange={[MockFunction]}
@@ -203,9 +224,16 @@ exports[`components/admin_console/system_users/list should match default snapsho
     previousPage={[Function]}
     renderCount={[Function]}
     renderFilterRow={[MockFunction]}
-    rowComponentType={[Function]}
+    rowComponentType={
+      Object {
+        "$$typeof": Symbol(react.memo),
+        "WrappedComponent": [Function],
+        "compare": null,
+        "displayName": "Connect(UserListRowWithError)",
+        "type": [Function],
+      }
+    }
     search={[Function]}
-    showTeamToggle={false}
     teamId=""
     term=""
     total={0}
@@ -265,7 +293,7 @@ exports[`components/admin_console/system_users/list should match default snapsho
 
 exports[`components/admin_console/system_users/list should match default snapshot, with users and mfa enabled 1`] = `
 <div>
-  <SearchableUserList
+  <injectIntl(SearchableUserList)
     actionProps={
       Object {
         "doEmailReset": [Function],
@@ -275,13 +303,19 @@ exports[`components/admin_console/system_users/list should match default snapsho
         "doPasswordReset": [Function],
         "enableUserAccessTokens": false,
         "experimentalEnableAuthenticationTransfer": false,
+        "isDisabled": false,
         "mfaEnabled": true,
       }
     }
-    actionUserProps={Object {}}
     actions={
       Array [
-        [Function],
+        Object {
+          "$$typeof": Symbol(react.memo),
+          "WrappedComponent": [Function],
+          "compare": null,
+          "displayName": "Connect(SystemUsersDropdown)",
+          "type": [Function],
+        },
       ]
     }
     enableUserAccessTokens={false}
@@ -412,6 +446,7 @@ exports[`components/admin_console/system_users/list should match default snapsho
     }
     filter=""
     focusOnMount={false}
+    isDisabled={false}
     mfaEnabled={true}
     nextPage={[Function]}
     onTermChange={[MockFunction]}
@@ -419,9 +454,16 @@ exports[`components/admin_console/system_users/list should match default snapsho
     previousPage={[Function]}
     renderCount={[Function]}
     renderFilterRow={[MockFunction]}
-    rowComponentType={[Function]}
+    rowComponentType={
+      Object {
+        "$$typeof": Symbol(react.memo),
+        "WrappedComponent": [Function],
+        "compare": null,
+        "displayName": "Connect(UserListRowWithError)",
+        "type": [Function],
+      }
+    }
     search={[Function]}
-    showTeamToggle={false}
     teamId=""
     term=""
     total={0}

@@ -1,15 +1,15 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
 import {shallow} from 'enzyme';
+import React from 'react';
 
 import NewMessageSeparator from './new_message_separator.jsx';
 
 describe('components/post_view/new_message_separator', () => {
     test('should render new_message_separator', () => {
         const wrapper = shallow(
-            <NewMessageSeparator separatorId='1234'/>
+            <NewMessageSeparator separatorId='1234'/>,
         );
         expect(wrapper).toMatchSnapshot();
     });

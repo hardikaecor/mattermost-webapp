@@ -1,9 +1,9 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import {shallow} from 'enzyme';
 import React from 'react';
 import {MemoryRouter} from 'react-router';
-import {shallow} from 'enzyme';
 
 import {mountWithIntl} from 'tests/helpers/intl-test-helper';
 
@@ -27,8 +27,8 @@ describe('components/PasswordResetSendLink', () => {
         const wrapper = mountWithIntl(
             <MemoryRouter>
                 <PasswordResetSendLink {...props}/>
-            </MemoryRouter>
-        ).children().children(); // Unwrap router
+            </MemoryRouter>,
+        ).children().children();
 
         wrapper.instance().emailInput.current.value = 'test@example.com';
         wrapper.find('form').simulate('submit', {preventDefault: () => {}});
